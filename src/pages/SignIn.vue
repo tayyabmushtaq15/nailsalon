@@ -2,15 +2,15 @@
 	<div
 		class="min-h-screen flex items-center justify-center relative overflow-hidden"
 	>
-		<div
+		<!-- <div
 			class="absolute inset-0 bg-cover bg-center"
 			:style="{ backgroundImage: `url(${nailImage})` }"
-		></div>
+		></div> -->
 
 		<div class="absolute inset-0 bg-white/40 backdrop-blur-sm"></div>
 
 		<div
-			class="relative w-full max-w-sm p-8 bg-white rounded-xl shadow-sm border border-gray-100"
+			class="relative w-full max-w-sm p-8 bg-white rounded-xl shadow-sm border border-gray-300"
 		>
 			<div class="text-center mb-6">
 				<img
