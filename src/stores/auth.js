@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { api} from '../services/api.js'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -15,21 +16,20 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       this.error = null
       try {
-        // TODO: call your real API here
-        // const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {...})
-        // const data = await res.json()
+        const res = await api('/auth/login', {
+          method: 'POST',
+          body: { email, password }
+        })
+        // API structure is { status, message, data: { token, user } }
+        const { token, user } = res.data
 
-        // Mock success:
-        await new Promise(r => setTimeout(r, 600))
-        const data = { token: 'fake_jwt_token', user: { id: 1, name: 'Nail Artist', email } }
-
-        this.token = data.token
-        this.user = data.user
+        this.token = token
+        this.user = user
         localStorage.setItem('token', this.token)
         localStorage.setItem('user', JSON.stringify(this.user))
         return true
       } catch (e) {
-        this.error = 'Invalid credentials'
+        this.error = e.message || 'Invalid credentials'
         return false
       } finally {
         this.loading = false

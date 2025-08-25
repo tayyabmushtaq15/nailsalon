@@ -2,15 +2,10 @@
 	<div
 		class="min-h-screen flex items-center justify-center relative overflow-hidden"
 	>
-		<div
-			class="absolute inset-0 bg-cover bg-center"
-			:style="{ backgroundImage: `url(${nailImage})` }"
-		></div>
-
 		<div class="absolute inset-0 bg-white/40 backdrop-blur-sm"></div>
 
 		<div
-			class="relative w-full max-w-sm p-8 bg-white rounded-xl shadow-sm border border-gray-100"
+			class="relative w-full max-w-sm p-8 bg-white rounded-xl shadow-sm border border-gray-300"
 		>
 			<div class="text-center mb-6">
 				<img
@@ -23,19 +18,29 @@
 			</div>
 
 			<form @submit.prevent="submitForm" class="space-y-4">
-				<input
-					v-model="email"
-					type="email"
-					placeholder="Email"
-					class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-				/>
+				<div>
+					<input
+						v-model="email"
+						type="email"
+						placeholder="Email"
+						class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+					/>
+					<p v-if="errors.email" class="text-red-500 text-sm mt-1">
+						{{ errors.email }}
+					</p>
+				</div>
 
-				<input
-					v-model="password"
-					type="password"
-					placeholder="Password"
-					class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-				/>
+				<div>
+					<input
+						v-model="password"
+						type="password"
+						placeholder="Password"
+						class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+					/>
+					<p v-if="errors.password" class="text-red-500 text-sm mt-1">
+						{{ errors.password }}
+					</p>
+				</div>
 
 				<button
 					type="submit"
@@ -64,23 +69,70 @@
 				>
 			</div>
 		</div>
+
+		<CustomSnackbar
+			v-model:show="showSnackbar"
+			:message="snackbarMessage"
+			:type="snackbarType"
+		/>
 	</div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-
-import nailImage from "../assets/nailImage.jpeg";
+import { useAuthStore } from "../stores/auth.js";
+import CustomSnackbar from "../components/CustomSnackbar.vue";
 
 const email = ref("");
 const password = ref("");
+const errors = ref({});
 const router = useRouter();
+const auth = useAuthStore();
 
-function submitForm() {
-	const token = "fake-jwt-token";
-	localStorage.setItem("token", token);
-	console.log("Logged in:", email.value);
-	router.push("/home");
+const showSnackbar = ref(false);
+const snackbarMessage = ref("");
+const snackbarType = ref("success");
+
+function validateForm() {
+	errors.value = {};
+	if (!email.value) {
+		errors.value.email = "Email is required";
+	} else if (!/\S+@\S+\.\S+/.test(email.value)) {
+		errors.value.email = "Enter a valid email address";
+	}
+	if (!password.value) {
+		errors.value.password = "Password is required";
+	}
+	return Object.keys(errors.value).length === 0;
+}
+
+async function submitForm() {
+	if (!validateForm()) return;
+
+	try {
+		const success = await auth.login({
+			email: email.value,
+			password: password.value
+		});
+
+		if (success) {
+			snackbarMessage.value = "Login successful!";
+			snackbarType.value = "success";
+			showSnackbar.value = true;
+			router.push("/home");
+		}
+		if (!success) {
+			snackbarMessage.value = "Invalid email or password.";
+			snackbarType.value = "error";
+			showSnackbar.value = true;
+		}
+	} catch (err) {
+		console.error("Login error:", err);
+		snackbarMessage.value =
+			err.response?.data?.message || "Login failed. Please try again.";
+		snackbarType.value = "error";
+		showSnackbar.value = true;
+	}
 }
 </script>
