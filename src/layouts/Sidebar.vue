@@ -1,6 +1,5 @@
 <template>
 	<div class="flex flex-col h-full p-4">
-		<!-- Logo Section -->
 		<div class="flex items-center gap-2 mb-6">
 			<img
 				src="../assets/fav.png"
@@ -19,7 +18,18 @@
 		<!-- Navigation -->
 		<ul class="list-none p-0 flex-1">
 			<li v-for="link in links" :key="link.to" class="mb-2">
+				<!-- Use Submenu if link has children -->
+				<SidebarSubmenu
+					v-if="link.children"
+					:label="link.label"
+					:icon="link.icon"
+					:items="link.children"
+					:to="link.to"
+					@close="$emit('close')"
+				/>
+				<!-- Normal Links -->
 				<router-link
+					v-else
 					:to="link.to"
 					class="flex items-center text-black text-lg rounded-md p-2 transition-colors duration-200 hover:bg-gray-200 hover:text-blue-600"
 					active-class="bg-blue-100 text-blue-600 font-semibold"
@@ -32,7 +42,6 @@
 			</li>
 		</ul>
 
-		<!-- Logout -->
 		<button
 			@click="logout"
 			class="mt-auto flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 border-2 border-gray-300 rounded-md px-4 py-2 transition-colors duration-200 hover:border-red-600"
@@ -44,13 +53,30 @@
 </template>
 
 <script>
+import SidebarSubmenu from "../components/SidebarSubMenu.vue";
+
 export default {
 	name: "Sidebar",
+	components: { SidebarSubmenu },
 	data() {
 		return {
 			links: [
 				{ to: "/home", label: "Home", icon: "pi-home" },
-				{ to: "/business", label: "Business", icon: "pi-briefcase" },
+
+				{
+					to: "/business",
+					label: "Business",
+					icon: "pi-briefcase",
+					children: [
+						{
+							to: "/business/add-business",
+							label: "Add Business",
+							icon: "pi-plus"
+						},
+						{ to: "/business/list", label: "View Businesses", icon: "pi-list" },
+						{ to: "/business/reports", label: "Reports", icon: "pi-chart-line" }
+					]
+				},
 				{ to: "/banners", label: "Banners", icon: "pi-image" },
 				{ to: "/settings", label: "Settings", icon: "pi-cog" },
 				{ to: "/privacy-policy", label: "Privacy Policy", icon: "pi-lock" },

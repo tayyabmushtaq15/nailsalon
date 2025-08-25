@@ -5,11 +5,25 @@
 		<button class="md:hidden text-gray-700" @click="$emit('toggleSidebar')">
 			<i class="pi pi-bars text-xl"></i>
 		</button>
+
+		<UserProfileMenu
+			name="John Doe"
+			email="johndoe@example.com"
+			@logout="logout"
+		/>
 	</div>
 </template>
 
 <script>
+import UserProfileMenu from "../components/UserProfileMenu.vue";
+
 export default {
-	name: "Topbar"
+	name: "Topbar",
+	components: { UserProfileMenu },
+	methods: {
+		logout() {
+			alert("Logged out!");
+		}
+	}
 };
 </script>

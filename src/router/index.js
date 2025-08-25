@@ -22,9 +22,21 @@ const routes = [
 			{ path: "home", name: "Dashboard", component: Dashboard },
 			{
 				path: "business",
-				name: "Business",
-				component: () => import("../pages/Business.vue")
+				component: () => import("../pages/business/Business.vue"),
+				children: [
+					{
+						path: "",
+						name: "BusinessHome",
+						component: () => import("../pages/business/BusinessOverview.vue")
+					},
+					{
+						path: "add-business",
+						name: "AddBusiness",
+						component: () => import("../pages/business/AddBusiness.vue")
+					}
+				]
 			},
+
 			{
 				path: "banners",
 				name: "Banners",
