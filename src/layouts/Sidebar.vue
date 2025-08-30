@@ -77,6 +77,12 @@ export default {
 						{ to: "/business/reports", label: "Reports", icon: "pi-chart-line" }
 					]
 				},
+
+				{
+					to: "/subscriptions",
+					label: "Subscriptions",
+					icon: "pi-credit-card"
+				},
 				{ to: "/banners", label: "Banners", icon: "pi-image" },
 				{ to: "/settings", label: "Settings", icon: "pi-cog" },
 				{ to: "/privacy-policy", label: "Privacy Policy", icon: "pi-lock" },

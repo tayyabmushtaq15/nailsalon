@@ -36,7 +36,30 @@ const routes = [
 					}
 				]
 			},
-
+			{
+				path: "subscriptions",
+				component: () => import("../pages/subscriptions/Subscriptions.vue"),
+				children: [
+					{
+						path: "",
+						name: "SubscriptionOverview",
+						component: () =>
+							import("../pages/subscriptions/SubscriptionOverview.vue")
+					},
+					{
+						path: "add-subscriptions",
+						name: "AddSubscription",
+						component: () =>
+							import("../pages/subscriptions/AddSubscription.vue")
+					},
+					{
+						path: "edit-subscriptions/:id",
+						name: "EditSubscription",
+						component: () =>
+							import("../pages/subscriptions/EditSubscription.vue")
+					}
+				]
+			},
 			{
 				path: "banners",
 				name: "Banners",
