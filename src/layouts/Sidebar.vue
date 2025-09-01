@@ -83,6 +83,11 @@ export default {
 					label: "Subscriptions",
 					icon: "pi-credit-card"
 				},
+				{
+					to: "/users",
+					label: "Users",
+					icon: "pi-users"
+				},
 				{ to: "/banners", label: "Banners", icon: "pi-image" },
 				{ to: "/settings", label: "Settings", icon: "pi-cog" },
 				{ to: "/privacy-policy", label: "Privacy Policy", icon: "pi-lock" },

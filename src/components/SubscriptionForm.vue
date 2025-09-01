@@ -190,7 +190,7 @@ const title = isEditMode ? "Edit Subscription" : "Add Subscription";
 			<Button
 				:label="isEditMode ? 'Save' : 'Submit'"
 				icon="pi pi-check"
-				class="w-full md:w-auto"
+				class="w-full md:w-auto !border hover:!border-primary hover:!text-primary hover:!bg-white !bg-primary !text-white !border-white rounded-md px-4 py-2"
 				@click="handleSubmit"
 			/>
 		</div>
