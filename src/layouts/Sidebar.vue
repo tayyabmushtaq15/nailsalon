@@ -62,6 +62,7 @@ export default {
 		return {
 			links: [
 				{ to: "/home", label: "Home", icon: "pi-home" },
+				{ to: "/users", label: "Users", icon: "pi-users" },
 
 				{
 					to: "/business",
@@ -79,19 +80,18 @@ export default {
 				},
 
 				{
-					to: "/subscriptions",
-					label: "Subscriptions",
-					icon: "pi-credit-card"
+					to: "/coupens",
+					label: "Coupens",
+					icon: "pi-tags"
 				},
 				{
-					to: "/users",
-					label: "Users",
-					icon: "pi-users"
+					to: "/subscriptions",
+					label: "Available Subscriptions",
+					icon: "pi-credit-card"
 				},
+
 				{ to: "/banners", label: "Banners", icon: "pi-image" },
-				{ to: "/settings", label: "Settings", icon: "pi-cog" },
-				{ to: "/privacy-policy", label: "Privacy Policy", icon: "pi-lock" },
-				{ to: "/terms-and-conditions", label: "Terms", icon: "pi-book" }
+				{ to: "/settings", label: "Settings", icon: "pi-cog" }
 			]
 		};
 	},

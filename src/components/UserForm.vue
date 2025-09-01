@@ -34,7 +34,7 @@ const form = reactive({
 
 const roleOptions = [
 	{ label: "Admin", value: "admin" },
-	{ label: "User", value: "user" },
+	{ label: "Employee", value: "employee" },
 	{ label: "Manager", value: "manager" }
 ];
 

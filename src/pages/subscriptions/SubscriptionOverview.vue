@@ -59,7 +59,7 @@ const goToEditSubscription = (subscription) => {
 		</Button>
 	</div>
 
-	<div class="flex flex-wrap justify-center gap-6 p-3 bg-slate-300 rounded-md">
+	<div class="flex flex-wrap justify-center gap-6 p-3 bg-gray-100 rounded-md">
 		<SubscriptionCard
 			v-for="sub in subscriptions"
 			:id="sub.id"
