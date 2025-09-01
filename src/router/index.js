@@ -61,6 +61,27 @@ const routes = [
 				]
 			},
 			{
+				path: "users",
+				component: () => import("../pages/users/Users.vue"),
+				children: [
+					{
+						path: "",
+						name: "usersOverview",
+						component: () => import("../pages/users/UsersOverview.vue")
+					},
+					{
+						path: "add-users",
+						name: "AddUsers",
+						component: () => import("../pages/users/AddUsers.vue")
+					},
+					{
+						path: "edit-users/:id",
+						name: "EditUsers",
+						component: () => import("../pages/users/EditUser.vue")
+					}
+				]
+			},
+			{
 				path: "banners",
 				name: "Banners",
 				component: () => import("../pages/Banners.vue")
