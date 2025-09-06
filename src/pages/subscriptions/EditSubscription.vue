@@ -39,7 +39,7 @@ const handleSubmit = async (payload) => {
 </script>
 
 <template>
-	<div class="p-6">
+	<div class="p-2">
 		<SubscriptionForm @submit="handleSubmit" :initialData="subscriptionData" />
 	</div>
 </template>

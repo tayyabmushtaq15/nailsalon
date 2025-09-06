@@ -44,7 +44,7 @@ function handleSubmit() {
 </script>
 
 <template>
-	<h2 class="text-2xl font-semibold mb-4">{{ title }}</h2>
+	<h2 class="text-xl font-semibold mb-4">{{ title }}</h2>
 
 	<div
 		class="p-fluid grid gap-4 border-collapse border border-1 border-gray-300 rounded-md pl-4 pt-2 pb-2 pr-4"
@@ -133,7 +133,6 @@ function handleSubmit() {
 				/>
 			</div>
 		</div>
-		<!-- Submit Button -->
 		<div class="col-12 flex justify-content-end md:justify-content-end">
 			<Button
 				:label="isEditMode == true ? 'Save' : 'Submit'"

@@ -19,22 +19,35 @@ const routes = [
 		component: Layout,
 		meta: { requiresAuth: true },
 		children: [
-			{ path: "home", name: "Dashboard", component: Dashboard },
+			{
+				path: "home",
+				name: "Dashboard",
+				component: Dashboard
+			},
 			{
 				path: "business",
 				component: () => import("../pages/business/Business.vue"),
 				children: [
 					{
 						path: "",
-						name: "BusinessHome",
-						component: () => import("../pages/business/BusinessOverview.vue")
+						name: "BusinessLogin",
+						component: () => import("../pages/business/BusinessLogin.vue"),
+						meta: { breadcrumb: "Business Login" }
+					},
+					{
+						path: "business-home",
+						name: "BusinessOverview",
+						component: () => import("../pages/business/BusinessOverview.vue"),
+						meta: { breadcrumb: "Business Overview" }
 					},
 					{
 						path: "add-business",
 						name: "AddBusiness",
-						component: () => import("../pages/business/AddBusiness.vue")
+						component: () => import("../pages/business/AddBusiness.vue"),
+						meta: { breadcrumb: "Add Business" }
 					}
-				]
+				],
+				meta: { breadcrumb: "Business" }
 			},
 			{
 				path: "subscriptions",
@@ -44,21 +57,25 @@ const routes = [
 						path: "",
 						name: "SubscriptionOverview",
 						component: () =>
-							import("../pages/subscriptions/SubscriptionOverview.vue")
+							import("../pages/subscriptions/SubscriptionOverview.vue"),
+						meta: { breadcrumb: "Subscriptions" }
 					},
 					{
 						path: "add-subscriptions",
 						name: "AddSubscription",
 						component: () =>
-							import("../pages/subscriptions/AddSubscription.vue")
+							import("../pages/subscriptions/AddSubscription.vue"),
+						meta: { breadcrumb: "Add Subscription" }
 					},
 					{
 						path: "edit-subscriptions/:id",
 						name: "EditSubscription",
 						component: () =>
-							import("../pages/subscriptions/EditSubscription.vue")
+							import("../pages/subscriptions/EditSubscription.vue"),
+						meta: { breadcrumb: "Edit Subscription" }
 					}
-				]
+				],
+				meta: { breadcrumb: "Subscriptions" }
 			},
 			{
 				path: "users",
@@ -67,39 +84,72 @@ const routes = [
 					{
 						path: "",
 						name: "usersOverview",
-						component: () => import("../pages/users/UsersOverview.vue")
+						component: () => import("../pages/users/UsersOverview.vue"),
+						meta: { breadcrumb: "Users" }
 					},
 					{
 						path: "add-users",
 						name: "AddUsers",
-						component: () => import("../pages/users/AddUsers.vue")
+						component: () => import("../pages/users/AddUsers.vue"),
+						meta: { breadcrumb: "Add User" }
 					},
 					{
 						path: "edit-users/:id",
 						name: "EditUsers",
-						component: () => import("../pages/users/EditUser.vue")
+						component: () => import("../pages/users/EditUser.vue"),
+						meta: { breadcrumb: "Edit User" }
 					}
-				]
+				],
+				meta: { breadcrumb: "Users" }
+			},
+			{
+				path: "coupons",
+				component: () => import("../pages/coupons/Coupons.vue"),
+				children: [
+					{
+						path: "",
+						name: "CouponsOverview",
+						component: () => import("../pages/coupons/CouponsOverview.vue"),
+						meta: { breadcrumb: "Coupons" }
+					},
+					{
+						path: "add-coupons",
+						name: "AddCoupons",
+						component: () => import("../pages/coupons/AddCoupons.vue"),
+						meta: { breadcrumb: "Add Coupon" }
+					},
+					{
+						path: "edit-coupons/:id",
+						name: "EditCoupons",
+						component: () => import("../pages/coupons/EditCoupons.vue"),
+						meta: { breadcrumb: "Edit Coupon" }
+					}
+				],
+				meta: { breadcrumb: "Coupons" }
 			},
 			{
 				path: "banners",
 				name: "Banners",
-				component: () => import("../pages/Banners.vue")
+				component: () => import("../pages/Banners.vue"),
+				meta: { breadcrumb: "Banners" }
 			},
 			{
 				path: "settings",
 				name: "Settings",
-				component: () => import("../pages/Settings.vue")
+				component: () => import("../pages/Settings.vue"),
+				meta: { breadcrumb: "Settings" }
 			},
 			{
 				path: "terms-and-conditions",
 				name: "Terms",
-				component: () => import("../pages/Terms.vue")
+				component: () => import("../pages/Terms.vue"),
+				meta: { breadcrumb: "Terms & Conditions" }
 			},
 			{
 				path: "privacy-policy",
 				name: "PrivacyPolicy",
-				component: () => import("../pages/PrivacyPolicy.vue")
+				component: () => import("../pages/PrivacyPolicy.vue"),
+				meta: { breadcrumb: "Privacy Policy" }
 			}
 		]
 	}
