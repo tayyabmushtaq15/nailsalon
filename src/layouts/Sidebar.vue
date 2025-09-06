@@ -67,21 +67,11 @@ export default {
 				{
 					to: "/business",
 					label: "Business",
-					icon: "pi-briefcase",
-					children: [
-						{
-							to: "/business/add-business",
-							label: "Add Business",
-							icon: "pi-plus"
-						},
-						{ to: "/business/list", label: "View Businesses", icon: "pi-list" },
-						{ to: "/business/reports", label: "Reports", icon: "pi-chart-line" }
-					]
+					icon: "pi-briefcase"
 				},
-
 				{
-					to: "/coupens",
-					label: "Coupens",
+					to: "/coupons",
+					label: "Coupons",
 					icon: "pi-tags"
 				},
 				{

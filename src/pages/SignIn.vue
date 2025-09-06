@@ -89,6 +89,7 @@ const password = ref("");
 const errors = ref({});
 const router = useRouter();
 const auth = useAuthStore();
+const loading = ref(false); // 👈 add this
 
 const showSnackbar = ref(false);
 const snackbarMessage = ref("");
@@ -109,7 +110,7 @@ function validateForm() {
 
 async function submitForm() {
 	if (!validateForm()) return;
-
+	loading.value = true;
 	try {
 		const success = await auth.login({
 			email: email.value,
@@ -133,6 +134,8 @@ async function submitForm() {
 			err.response?.data?.message || "Login failed. Please try again.";
 		snackbarType.value = "error";
 		showSnackbar.value = true;
+	} finally {
+		loading.value = false; // 👈 stop spinner
 	}
 }
 </script>

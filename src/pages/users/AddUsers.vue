@@ -33,7 +33,7 @@ async function handleUserSubmit(userData) {
 </script>
 
 <template>
-	<div class="p-6">
+	<div class="p-2">
 		<UserForm
 			title="Add New User"
 			@submit="handleUserSubmit"

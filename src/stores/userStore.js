@@ -1,4 +1,3 @@
-// src/stores/userStore.js
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { api } from "../services/api";
@@ -7,7 +6,6 @@ export const useUserStore = defineStore("userStore", () => {
 	const users = ref([]);
 	const loading = ref(false);
 
-	// Fetch users from API
 	const fetchUsers = async () => {
 		loading.value = true;
 		try {
@@ -20,7 +18,6 @@ export const useUserStore = defineStore("userStore", () => {
 		}
 	};
 
-	// Delete user
 	const deleteUser = async (id) => {
 		try {
 			await api.delete(`/users/${id}`);

@@ -50,7 +50,7 @@ const goToEditSubscription = (subscription) => {
 
 <template>
 	<div class="flex flex-row justify-between items-center mb-2">
-		<p></p>
+		<h2 class="text-xl font-semibold mb-4">Subscriptions</h2>
 		<Button
 			class="w-auto rounded-lg p-2 !bg-primary hover:!bg-secondary text-white font-semibold text-md tracking-wide transition duration-300"
 			@click="goToAddSubscription"
@@ -59,7 +59,9 @@ const goToEditSubscription = (subscription) => {
 		</Button>
 	</div>
 
-	<div class="flex flex-wrap justify-center gap-6 p-3 bg-gray-100 rounded-md">
+	<div
+		class="flex flex-wrap justify-center gap-6 p-3 border-collapse border rounded-md"
+	>
 		<SubscriptionCard
 			v-for="sub in subscriptions"
 			:id="sub.id"

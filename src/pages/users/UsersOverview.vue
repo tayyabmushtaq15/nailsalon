@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useUserStore } from "../../stores/userStore";
-import GenericTable from "../../components/CustomTable.vue";
+import CustomCard from "../../components/CustomCard.vue";
 import ConfirmationModal from "../../components/ConfirmationModal.vue";
 import { useToast } from "primevue/usetoast";
 import { useRouter } from "vue-router";
@@ -61,7 +61,7 @@ const confirmDelete = async () => {
 </script>
 
 <template>
-	<div class="p-6">
+	<div class="p-1">
 		<div class="flex flex-row justify-between items-end mb-2 p-2">
 			<h2 class="text-xl font-semibold mb-4">Users</h2>
 			<Button
@@ -72,28 +72,22 @@ const confirmDelete = async () => {
 			</Button>
 		</div>
 
-		<GenericTable
-			:columns="columns"
-			:data="userStore.users"
-			:loading="userStore.loading"
-			:show-actions="true"
-			@edit="handleEdit"
-			@delete="askDeleteConfirmation"
+		<div
+			v-if="userStore.users.length"
+			class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-3 auto-rows-fr"
 		>
-			<template #status="{ data }">
-				<span
-					:class="
-						data.status === 'ACTIVE'
-							? 'text-green-600 font-medium'
-							: 'text-red-600 font-medium'
-					"
-				>
-					{{ data.status }}
-				</span>
-			</template>
-		</GenericTable>
+			<CustomCard
+				v-for="user in userStore.users"
+				:key="user.id"
+				:user="user"
+				@edit="handleEdit"
+				@delete="askDeleteConfirmation"
+				class="w-full h-full"
+			/>
+		</div>
 
-		<!-- Confirmation Modal -->
+		<p v-else class="text-center text-gray-500 mt-6">No users found.</p>
+
 		<ConfirmationModal
 			v-model:visible="showConfirmModal"
 			title="Delete User"

@@ -60,7 +60,7 @@ async function handleUserSubmit(userData) {
 </script>
 
 <template>
-	<div class="p-6">
+	<div class="p-2">
 		<UserForm
 			v-if="editUserData"
 			title="Edit User"
