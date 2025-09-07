@@ -18,6 +18,7 @@
 		<div class="flex-1 flex flex-col">
 			<Topbar @toggleSidebar="isSidebarOpen = !isSidebarOpen" />
 			<main class="flex-1 overflow-y-auto p-4">
+				<Breadcrumb />
 				<router-view />
 			</main>
 		</div>
@@ -28,6 +29,7 @@
 import { ref } from "vue";
 import Sidebar from "./Sidebar.vue";
 import Topbar from "./Topbar.vue";
+import Breadcrumb from "../components/Breadcrumb.vue";
 
 const isSidebarOpen = ref(false);
 </script>

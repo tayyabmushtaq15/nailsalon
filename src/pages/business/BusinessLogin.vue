@@ -6,7 +6,8 @@ import { useBusinessUserStore } from "../../stores/businessUserStore";
 import api from "../../services/api";
 import { InputText } from "primevue";
 import Button from "../../components/Button.vue";
-
+import { useRoute } from "vue-router";
+const route = useRoute();
 const email = ref("");
 const loading = ref(false);
 
@@ -33,20 +34,7 @@ const submitForm = async () => {
 		);
 
 		console.log("Full response:", res.data);
-
-		const user = res?.data?.data?.user_detail?.[0];
-
-		if (res.status && user) {
-			userStore.setUserDetail(user);
-			router.push("business/business-home");
-		} else {
-			toast.add({
-				severity: "error",
-				summary: "Not Found",
-				detail: "No user found with this email",
-				life: 3000
-			});
-		}
+		router.push("/business/business-login/business-stepper");
 	} catch (error) {
 		console.error("API error:", error);
 		toast.add({
@@ -62,7 +50,10 @@ const submitForm = async () => {
 </script>
 
 <template>
-	<div class="flex items-center justify-center mt-24">
+	<div
+		v-if="route.name !== 'BusinessStepper'"
+		class="flex items-center justify-center mt-24"
+	>
 		<div
 			class="bg-white shadow-md w-full max-w-md border border-collapse p-8 rounded-lg"
 		>
@@ -83,4 +74,5 @@ const submitForm = async () => {
 			</form>
 		</div>
 	</div>
+	<router-view />
 </template>

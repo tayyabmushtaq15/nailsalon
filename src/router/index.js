@@ -30,21 +30,30 @@ const routes = [
 				children: [
 					{
 						path: "",
-						name: "BusinessLogin",
-						component: () => import("../pages/business/BusinessLogin.vue"),
-						meta: { breadcrumb: "Business Login" }
-					},
-					{
-						path: "business-home",
 						name: "BusinessOverview",
 						component: () => import("../pages/business/BusinessOverview.vue"),
 						meta: { breadcrumb: "Business Overview" }
 					},
 					{
-						path: "add-business",
-						name: "AddBusiness",
-						component: () => import("../pages/business/AddBusiness.vue"),
-						meta: { breadcrumb: "Add Business" }
+						path: "business-login",
+						name: "BusinessLogin",
+						component: () => import("../pages/business/BusinessLogin.vue"),
+						children: [
+							{
+								path: "business-stepper",
+								name: "BusinessStepper",
+								component: () =>
+									import("../pages/business/BusinnesStepper.vue"),
+								meta: { breadcrumb: "Business Stepper" }
+							}
+						],
+						meta: { breadcrumb: "Business Login" }
+					},
+					{
+						path: "business-details/:id",
+						name: "BusinessDetails",
+						component: () => import("../pages/business/BusinessDetails.vue"),
+						meta: { breadcrumb: "Edit Details" }
 					}
 				],
 				meta: { breadcrumb: "Business" }

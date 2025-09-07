@@ -67,6 +67,7 @@ async function handleUserSubmit(userData) {
 			:isEditMode="true"
 			:initialData="editUserData"
 			@submit="handleUserSubmit"
+			buttonText="Save"
 		/>
 	</div>
 </template>

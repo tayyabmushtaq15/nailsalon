@@ -9,6 +9,10 @@ const props = defineProps({
 		type: String,
 		default: "User Form"
 	},
+	buttonText: {
+		type: String,
+		default: "Save"
+	},
 	isEditMode: {
 		type: Boolean,
 		default: false
@@ -135,8 +139,14 @@ function handleSubmit() {
 		</div>
 		<div class="col-12 flex justify-content-end md:justify-content-end">
 			<Button
-				:label="isEditMode == true ? 'Save' : 'Submit'"
-				icon="pi pi-check"
+				:label="buttonText"
+				:icon="
+					buttonText === 'Save'
+						? 'pi pi-check'
+						: buttonText === 'Submit'
+							? 'pi pi-check'
+							: 'pi pi-arrow-right'
+				"
 				class="w-full md:w-auto !border hover:!border-primary hover:!text-primary hover:!bg-white !bg-primary !text-white !border-white rounded-md px-4 py-2"
 				@click="handleSubmit"
 			/>

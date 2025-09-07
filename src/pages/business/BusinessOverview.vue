@@ -1,3 +1,10 @@
+<script setup>
+import BusinessList from "./BusinessList.vue";
+</script>
+
 <template>
-	<div><h2 class="text-xl font-semibold mb-4">Business</h2></div>
+	<div class="-p-2">
+		<BusinessList />
+		<router-view />
+	</div>
 </template>
