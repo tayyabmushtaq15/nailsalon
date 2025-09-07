@@ -38,6 +38,7 @@ async function handleUserSubmit(userData) {
 			title="Add New User"
 			@submit="handleUserSubmit"
 			:isEditMode="false"
+			buttonText="Submit"
 		/>
 	</div>
 </template>
