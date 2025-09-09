@@ -38,10 +38,12 @@ function handleSubmit() {
 }
 
 const discountTypeOptions = [
-	{ label: "Fixed", value: "fixed" },
-	{ label: "Percentage", value: "percentage" }
+	// { label: "Fixed", value: "fixed" },
+	// { label: "Percentage", value: "percentage" },
+	{ label: "Banner", value: "Banner" },
+	{ label: "Free Banner", value: "Free Banner" },
+	{ label: "Subscription", value: "Subscription" }
 ];
-
 const statusOptions = [
 	{ label: "Active", value: "active" },
 	{ label: "Inactive", value: "inactive" }

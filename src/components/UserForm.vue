@@ -41,6 +41,10 @@ const roleOptions = [
 	{ label: "Employee", value: "employee" },
 	{ label: "Manager", value: "manager" }
 ];
+const statusOptions = [
+	{ label: "Active", value: "active" },
+	{ label: "Inactive", value: "inactive" }
+];
 
 function handleSubmit() {
 	emit("submit", { ...form });
@@ -122,7 +126,6 @@ function handleSubmit() {
 				/>
 			</div>
 		</div>
-
 		<div class="col-12 flex flex-wrap gap-4">
 			<div class="flex-1 min-w-[200px]">
 				<label for="role">Role</label>
@@ -137,6 +140,28 @@ function handleSubmit() {
 				/>
 			</div>
 		</div>
+		<div class="col-12">
+			<label for="status">Status</label>
+			<Dropdown
+				id="status"
+				v-model="form.status"
+				:options="statusOptions"
+				optionLabel="label"
+				optionValue="value"
+				placeholder="Select status"
+				class="w-full"
+			/>
+		</div>
+		<div class="flex-1 min-w-[200px]">
+			<label for="last_name">Status reason</label>
+			<InputText
+				id="status_reason"
+				v-model="form.status_reason"
+				placeholder="Enter status reason"
+				class="w-full"
+			/>
+		</div>
+
 		<div class="col-12 flex justify-content-end md:justify-content-end">
 			<Button
 				:label="buttonText"

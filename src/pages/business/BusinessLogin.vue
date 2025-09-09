@@ -32,15 +32,16 @@ const submitForm = async () => {
 		const res = await api.get(
 			`/businesses/user?email=${encodeURIComponent(email.value)}`
 		);
-
+		userStore.setUserDetail(res.data.data.user_detail[0]);
 		console.log("Full response:", res.data);
 		router.push("/business/business-login/business-stepper");
 	} catch (error) {
 		console.error("API error:", error);
+		router.push("/users/add-users");
 		toast.add({
 			severity: "error",
 			summary: "Error",
-			detail: "Something went wrong",
+			detail: error.response?.data?.message || "Failed to fetch user",
 			life: 3000
 		});
 	} finally {
