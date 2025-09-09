@@ -30,7 +30,12 @@ const form = reactive({
 	valid_till: props.initialData.valid_till
 		? new Date(props.initialData.valid_till)
 		: null,
-	status: props.initialData.status || "active"
+	status:
+  props.initialData.status?.toLowerCase() === "active"
+    ? "active"
+    : props.initialData.status?.toLowerCase() === "inactive"
+    ? "inactive"
+    : "active"
 });
 
 function handleSubmit() {

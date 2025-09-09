@@ -45,9 +45,10 @@ async function approveBusiness(businessId) {
 			detail: "Business approved successfully",
 			life: 3000
 		});
+		window.location.reload();
 		// Refresh awaiting list
-		fetchBusinesses("approval");
-		fetchBusinesses("all");
+		// fetchBusinesses("approval");
+		// fetchBusinesses("all");
 	} catch (err) {
 		toast.add({
 			severity: "error",
