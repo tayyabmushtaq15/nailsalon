@@ -14,13 +14,14 @@ const businesses = ref([]);
 const awaitingBusinesses = ref([]);
 const loading = ref(false);
 const router = useRouter();
-async function fetchBusinesses(type = "all") {
+async function fetchBusinesses(type) {
 	try {
 		loading.value = true;
 		if (type === "all") {
 			const res = await api.get("/businesses");
 			businesses.value = res?.data?.businesses || [];
-		} else {
+		}
+		if (type === "approval") {
 			const res = await api.get("/businesses/approval");
 			awaitingBusinesses.value = res?.data?.businesses || [];
 		}
@@ -28,14 +29,34 @@ async function fetchBusinesses(type = "all") {
 		toast.add({
 			severity: "error",
 			summary: "Error",
-			detail: "Failed to load businesses",
+			detail: res?.data?.message || "Failed to load businesses",
 			life: 3000
 		});
 	} finally {
 		loading.value = false;
 	}
 }
-
+async function approveBusiness(businessId) {
+	try {
+		await api.put(`/businesses/approval/${businessId}`);
+		toast.add({
+			severity: "success",
+			summary: "Approved",
+			detail: "Business approved successfully",
+			life: 3000
+		});
+		// Refresh awaiting list
+		fetchBusinesses("approval");
+		fetchBusinesses("all");
+	} catch (err) {
+		toast.add({
+			severity: "error",
+			summary: "Error",
+			detail: "Failed to approve business",
+			life: 3000
+		});
+	}
+}
 onMounted(() => {
 	fetchBusinesses("all");
 	fetchBusinesses("approval");
@@ -123,8 +144,7 @@ const goToAddBusiness = () => {
 					<Card
 						v-for="biz in awaitingBusinesses"
 						:key="biz.id"
-						class="shadow-sm border rounded-2xl cursor-pointer hover:shadow-lg transition p-4 relative"
-						@click="router.push(`/business/business-details/${biz.id}`)"
+						class="shadow-sm border rounded-2xl hover:shadow-lg transition p-4 relative"
 					>
 						<template #title>
 							<div class="flex justify-between items-center">
@@ -145,6 +165,13 @@ const goToAddBusiness = () => {
 										biz.registered_by?.registered_by || "N/A"
 									}}</span>
 								</p>
+							</div>
+							<div class="mt-3 flex justify-end">
+								<Button
+									label="Approve"
+									class="!bg-green-600 hover:!bg-green-700 text-white font-medium px-4 py-2 rounded-md"
+									@click="approveBusiness(biz.id)"
+								/>
 							</div>
 						</template>
 					</Card>
