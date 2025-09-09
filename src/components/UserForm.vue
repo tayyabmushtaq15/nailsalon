@@ -33,7 +33,14 @@ const form = reactive({
 	role: props.initialData.role || "",
 	image: props.initialData.image || "",
 	country_code: props.initialData.country_code || "",
-	phone: props.initialData.phone || ""
+	phone: props.initialData.phone || "",
+	status:
+  props.initialData.status?.toLowerCase() === "active"
+    ? "active"
+    : props.initialData.status?.toLowerCase() === "inactive"
+    ? "inactive"
+    : "active",
+	status_reason: props.initialData.status_reason || ""
 });
 
 const roleOptions = [
