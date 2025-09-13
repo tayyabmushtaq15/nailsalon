@@ -1,9 +1,9 @@
 <template>
 	<div class="flex items-center gap-2 ml-auto">
 		<Avatar
-			:image="avatar"
+			:label="initials"
 			shape="circle"
-			class="cursor-pointer"
+			class="cursor-pointer bg-primary text-white font-semibold"
 			@click="toggleMenu($event)"
 		/>
 		<i
@@ -31,10 +31,14 @@ export default {
 	components: { Avatar, Menu },
 	props: {
 		name: { type: String, required: true },
-		email: { type: String, required: true },
-		avatar: {
-			type: String,
-			default: "https://i.pravatar.cc/40"
+		email: { type: String, required: true }
+	},
+	computed: {
+		initials() {
+			if (!this.name) return "?";
+			const parts = this.name.trim().split(" ");
+			if (parts.length === 1) return parts[0][0].toUpperCase();
+			return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 		}
 	},
 	data() {

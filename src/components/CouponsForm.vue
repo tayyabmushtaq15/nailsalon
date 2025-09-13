@@ -25,17 +25,16 @@ const form = reactive({
 	code: props.initialData.code || "",
 	discount_type: props.initialData.discount_type || "fixed",
 	discount_value: props.initialData.discount_value || 0,
-	business_id: props.initialData.business_id || "",
 	usage_limit: props.initialData.usage_limit || 0,
 	valid_till: props.initialData.valid_till
 		? new Date(props.initialData.valid_till)
 		: null,
 	status:
-  props.initialData.status?.toLowerCase() === "active"
-    ? "active"
-    : props.initialData.status?.toLowerCase() === "inactive"
-    ? "inactive"
-    : "active"
+		props.initialData.status?.toLowerCase() === "active"
+			? "active"
+			: props.initialData.status?.toLowerCase() === "inactive"
+				? "inactive"
+				: "active"
 });
 
 function handleSubmit() {
@@ -86,7 +85,10 @@ const statusOptions = [
 					class="w-full"
 				/>
 			</div>
+		</div>
 
+		<!-- Business ID & Usage Limit -->
+		<div class="col-12 flex flex-wrap gap-4">
 			<div class="flex-1 min-w-[200px]">
 				<label for="discount_value">Discount Value</label>
 				<InputText
@@ -94,19 +96,6 @@ const statusOptions = [
 					v-model.number="form.discount_value"
 					type="number"
 					placeholder="Enter value"
-					class="w-full"
-				/>
-			</div>
-		</div>
-
-		<!-- Business ID & Usage Limit -->
-		<div class="col-12 flex flex-wrap gap-4">
-			<div class="flex-1 min-w-[200px]">
-				<label for="business_id">Business ID</label>
-				<InputText
-					id="business_id"
-					v-model="form.business_id"
-					placeholder="Enter business ID"
 					class="w-full"
 				/>
 			</div>

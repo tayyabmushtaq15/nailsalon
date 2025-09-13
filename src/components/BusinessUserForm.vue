@@ -1,22 +1,16 @@
 <script setup>
 import { reactive } from "vue";
 import InputText from "primevue/inputtext";
-import Dropdown from "primevue/dropdown";
 import Button from "primevue/button";
-import { computed } from "vue";
 
 const props = defineProps({
 	title: {
 		type: String,
-		default: "User Form"
+		default: "Business User Form"
 	},
 	buttonText: {
 		type: String,
 		default: "Save"
-	},
-	isEditMode: {
-		type: Boolean,
-		default: false
 	},
 	initialData: {
 		type: Object,
@@ -26,35 +20,21 @@ const props = defineProps({
 
 const emit = defineEmits(["submit"]);
 
+// form data (default internal values for hidden fields)
 const form = reactive({
 	email: props.initialData.email || "",
-	password: props.initialData.password || "",
 	first_name: props.initialData.first_name || "",
 	last_name: props.initialData.last_name || "",
-	role: props.initialData.role || "",
 	image: props.initialData.image || "",
 	country_code: props.initialData.country_code || "",
 	phone: props.initialData.phone || "",
-	status:
-		props.initialData.status?.toLowerCase() === "active"
-			? "active"
-			: props.initialData.status?.toLowerCase() === "inactive"
-				? "inactive"
-				: "active",
-	status_reason: props.initialData.status_reason || ""
+
+	// handled internally
+	password: "defaultPassword123", // or empty string
+	role: "admin",
+	status: "active",
+	status_reason: ""
 });
-
-const roleOptions = [
-	{ label: "Admin", value: "admin" },
-	{ label: "Employee", value: "employee" },
-	{ label: "Manager", value: "manager" }
-];
-const statusOptions = [
-	{ label: "Active", value: "active" },
-	{ label: "Inactive", value: "inactive" }
-];
-
-const isInactive = computed(() => form.status === "inactive");
 
 function handleSubmit() {
 	emit("submit", { ...form });
@@ -100,18 +80,6 @@ function handleSubmit() {
 					class="w-full"
 				/>
 			</div>
-
-			<div class="flex-1 min-w-[200px]">
-				<label for="password">Password</label>
-				<InputText
-					type="password"
-					id="password"
-					v-model="form.password"
-					feedback="false"
-					placeholder="Enter password"
-					class="w-full"
-				/>
-			</div>
 		</div>
 
 		<div class="col-12 flex flex-wrap gap-4">
@@ -135,41 +103,6 @@ function handleSubmit() {
 					class="w-full"
 				/>
 			</div>
-		</div>
-		<div class="col-12 flex flex-wrap gap-4">
-			<div class="flex-1 min-w-[200px]">
-				<label for="role">Role</label>
-				<Dropdown
-					id="role"
-					v-model="form.role"
-					:options="roleOptions"
-					optionLabel="label"
-					optionValue="value"
-					placeholder="Select role"
-					class="w-full"
-				/>
-			</div>
-		</div>
-		<div class="col-12">
-			<label for="status">Status</label>
-			<Dropdown
-				id="status"
-				v-model="form.status"
-				:options="statusOptions"
-				optionLabel="label"
-				optionValue="value"
-				placeholder="Select status"
-				class="w-full"
-			/>
-		</div>
-		<div v-if="isInactive" class="flex-1 min-w-[200px]">
-			<label for="status_reason">Status reason</label>
-			<InputText
-				id="status_reason"
-				v-model="form.status_reason"
-				placeholder="Enter status reason"
-				class="w-full"
-			/>
 		</div>
 
 		<div class="col-12 flex justify-content-end md:justify-content-end">
