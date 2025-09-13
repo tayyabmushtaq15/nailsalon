@@ -37,7 +37,7 @@ const submitForm = async () => {
 		router.push("/business/business-login/business-stepper");
 	} catch (error) {
 		console.error("API error:", error);
-		router.push("/users/add-users");
+		router.push("/business/business-user-form");
 		toast.add({
 			severity: "error",
 			summary: "Error",
@@ -51,6 +51,8 @@ const submitForm = async () => {
 </script>
 
 <template>
+	<router-view />
+
 	<div
 		v-if="route.name !== 'BusinessStepper'"
 		class="flex items-center justify-center mt-24"
@@ -75,5 +77,4 @@ const submitForm = async () => {
 			</form>
 		</div>
 	</div>
-	<router-view />
 </template>

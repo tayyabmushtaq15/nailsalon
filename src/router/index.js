@@ -54,6 +54,13 @@ const routes = [
 						name: "BusinessDetails",
 						component: () => import("../pages/business/BusinessDetails.vue"),
 						meta: { breadcrumb: "Edit Details" }
+					},
+					{
+						path: "business-user-form",
+						name: "BusinessUserForm",
+						component: () =>
+							import("../pages/business/BusinessUserFormPage.vue"),
+						meta: { breadcrumb: "Business User Form" }
 					}
 				],
 				meta: { breadcrumb: "Business" }

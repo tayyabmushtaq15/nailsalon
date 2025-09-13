@@ -81,15 +81,14 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "../stores/auth.js";
+import { api } from "../services/api";
 import CustomSnackbar from "../components/CustomSnackbar.vue";
 
 const email = ref("");
 const password = ref("");
 const errors = ref({});
 const router = useRouter();
-const auth = useAuthStore();
-const loading = ref(false); // 👈 add this
+const loading = ref(false);
 
 const showSnackbar = ref(false);
 const snackbarMessage = ref("");
@@ -111,20 +110,24 @@ function validateForm() {
 async function submitForm() {
 	if (!validateForm()) return;
 	loading.value = true;
+
 	try {
-		const success = await auth.login({
+		const res = await api.post("/users/login", {
 			email: email.value,
 			password: password.value
 		});
 
-		if (success) {
-			snackbarMessage.value = "Login successful!";
+		if (res.status) {
+			localStorage.setItem("token", res.data.token);
+			localStorage.setItem("user", JSON.stringify(res.data));
+
+			snackbarMessage.value = res.message || "Login successful!";
 			snackbarType.value = "success";
 			showSnackbar.value = true;
+
 			router.push("/home");
-		}
-		if (!success) {
-			snackbarMessage.value = "Invalid email or password.";
+		} else {
+			snackbarMessage.value = res.message || "Invalid email or password.";
 			snackbarType.value = "error";
 			showSnackbar.value = true;
 		}
@@ -135,7 +138,7 @@ async function submitForm() {
 		snackbarType.value = "error";
 		showSnackbar.value = true;
 	} finally {
-		loading.value = false; // 👈 stop spinner
+		loading.value = false;
 	}
 }
 </script>

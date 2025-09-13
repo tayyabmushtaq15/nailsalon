@@ -121,6 +121,12 @@ const confirmDeleteCoupon = async () => {
 							{{ new Date(coupon.valid_till).toLocaleDateString() }}
 						</span>
 					</p>
+					<p class="text-gray-700">
+						Discount Type:
+						<span class="text-lg font-bold text-indigo-900">
+							{{ coupon.discount_type || "N/A" }}</span
+						>
+					</p>
 					<p class="mt-1 text-sm">
 						Status:
 						<span

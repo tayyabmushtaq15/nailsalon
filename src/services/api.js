@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useLoadingStore } from "../stores/loading";
+import { useToast } from "primevue/usetoast";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -13,13 +14,11 @@ const apiClient = axios.create({
 // Request interceptor
 apiClient.interceptors.request.use(
 	(config) => {
-		// 🔹 add token
 		const token = localStorage.getItem("token");
 		if (token) {
 			config.headers.Authorization = `Bearer ${token}`;
 		}
 
-		// 🔹 show loader
 		const loading = useLoadingStore();
 		loading.start();
 
@@ -42,6 +41,25 @@ apiClient.interceptors.response.use(
 	(error) => {
 		const loading = useLoadingStore();
 		loading.stop();
+
+		// 🔹 Handle expired/invalid token
+		if (error.response && error.response.status === 401) {
+			// Clear token
+			localStorage.removeItem("token");
+
+			// Show toast
+			const toast = useToast();
+			toast.add({
+				severity: "warn",
+				summary: "Session Expired",
+				detail: "Please log in again.",
+				life: 4000
+			});
+
+			// Redirect to login page
+			window.location.href = "/signin";
+		}
+
 		return Promise.reject(error);
 	}
 );

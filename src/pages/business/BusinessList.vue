@@ -12,12 +12,15 @@ const toast = useToast();
 
 const businesses = ref([]);
 const awaitingBusinesses = ref([]);
+const rejectedBusinesses = ref([]);
 const loading = ref(false);
+const activeIndex = ref(0); // track current tab
 const router = useRouter();
+
 async function fetchBusinesses(type) {
 	try {
 		loading.value = true;
-		if (type === "all") {
+		if (type === "approved") {
 			const res = await api.get("/businesses");
 			businesses.value = res?.data?.businesses || [];
 		}
@@ -25,17 +28,22 @@ async function fetchBusinesses(type) {
 			const res = await api.get("/businesses/approval");
 			awaitingBusinesses.value = res?.data?.businesses || [];
 		}
+		if (type === "rejected") {
+			const res = await api.get("/businesses/reject");
+			rejectedBusinesses.value = res?.data?.businesses || [];
+		}
 	} catch (err) {
 		toast.add({
 			severity: "error",
 			summary: "Error",
-			detail: res?.data?.message || "Failed to load businesses",
+			detail: err?.response?.data?.message || "Failed to load businesses",
 			life: 3000
 		});
 	} finally {
 		loading.value = false;
 	}
 }
+
 async function approveBusiness(businessId) {
 	try {
 		await api.put(`/businesses/approval/${businessId}`);
@@ -45,10 +53,8 @@ async function approveBusiness(businessId) {
 			detail: "Business approved successfully",
 			life: 3000
 		});
-		window.location.reload();
-		// Refresh awaiting list
-		// fetchBusinesses("approval");
-		// fetchBusinesses("all");
+		fetchBusinesses("approval");
+		fetchBusinesses("approved");
 	} catch (err) {
 		toast.add({
 			severity: "error",
@@ -58,13 +64,46 @@ async function approveBusiness(businessId) {
 		});
 	}
 }
-onMounted(() => {
-	fetchBusinesses("all");
-	fetchBusinesses("approval");
-});
+
+async function deactivateBusiness(businessId) {
+	try {
+		await api.put(`/businesses/reject/${businessId}`);
+		toast.add({
+			severity: "success",
+			summary: "Deactivated",
+			detail: "Business deactivated successfully",
+			life: 3000
+		});
+		fetchBusinesses("approved");
+		fetchBusinesses("rejected");
+	} catch (err) {
+		toast.add({
+			severity: "error",
+			summary: "Error",
+			detail: "Failed to deactivate business",
+			life: 3000
+		});
+	}
+}
 
 const goToAddBusiness = () => {
 	router.push("/business/business-login");
+};
+
+// Load initial tabs
+onMounted(() => {
+	fetchBusinesses("approved");
+});
+
+// Handle tab change
+const onTabChange = (e) => {
+	activeIndex.value = e.index;
+	if (e.index === 0 && businesses.value.length === 0)
+		fetchBusinesses("approved");
+	if (e.index === 1 && awaitingBusinesses.value.length === 0)
+		fetchBusinesses("approval");
+	if (e.index === 2 && rejectedBusinesses.value.length === 0)
+		fetchBusinesses("rejected");
 };
 </script>
 
@@ -79,9 +118,10 @@ const goToAddBusiness = () => {
 				+ Add New Business
 			</Button>
 		</div>
-		<TabView>
-			<!-- All Businesses -->
-			<TabPanel header="All">
+
+		<TabView v-model:activeIndex="activeIndex" @tab-change="onTabChange">
+			<!-- Approved -->
+			<TabPanel header="Approved">
 				<div v-if="loading" class="text-center py-8 text-gray-500">
 					Loading...
 				</div>
@@ -92,11 +132,13 @@ const goToAddBusiness = () => {
 					<Card
 						v-for="biz in businesses"
 						:key="biz.id"
-						class="shadow-sm border rounded-2xl cursor-pointer hover:shadow-lg transition p-4 relative"
-						@click="router.push(`/business/business-details/${biz.id}`)"
+						class="shadow-sm border rounded-2xl hover:shadow-lg transition p-4 relative"
 					>
 						<template #title>
-							<div class="flex justify-between items-center">
+							<div
+								class="flex justify-between items-center cursor-pointer"
+								@click="router.push(`/business/business-details/${biz.id}`)"
+							>
 								<span class="font-semibold text-lg truncate">{{
 									biz.name
 								}}</span>
@@ -113,8 +155,12 @@ const goToAddBusiness = () => {
 								/>
 							</div>
 						</template>
+
 						<template #content>
-							<div class="space-y-2 mt-2 text-gray-600">
+							<div
+								class="space-y-2 mt-2 text-gray-600 cursor-pointer"
+								@click="router.push(`/business/business-details/${biz.id}`)"
+							>
 								<p class="text-sm">📍 {{ biz.address }}</p>
 								<p class="text-sm">📧 {{ biz.support_email }}</p>
 								<p class="text-sm">📞 {{ biz.support_phone }}</p>
@@ -124,6 +170,13 @@ const goToAddBusiness = () => {
 										biz.registered_by?.registered_by || "N/A"
 									}}</span>
 								</p>
+							</div>
+							<div v-if="biz.status === 'ACTIVE'" class="mt-3 flex justify-end">
+								<Button
+									label="Deactivate"
+									class="!bg-red-600 hover:!bg-red-700 text-white font-medium px-4 py-2 rounded-md"
+									@click.stop="deactivateBusiness(biz.id)"
+								/>
 							</div>
 						</template>
 					</Card>
@@ -179,6 +232,55 @@ const goToAddBusiness = () => {
 				</div>
 				<p v-else class="text-gray-500 text-center py-8">
 					No businesses awaiting approval.
+				</p>
+			</TabPanel>
+
+			<!-- Rejected -->
+			<TabPanel header="Rejected">
+				<div v-if="loading" class="text-center py-8 text-gray-500">
+					Loading...
+				</div>
+				<div
+					v-else-if="rejectedBusinesses.length"
+					class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+				>
+					<Card
+						v-for="biz in rejectedBusinesses"
+						:key="biz.id"
+						class="shadow-sm border rounded-2xl hover:shadow-lg transition p-4 relative"
+					>
+						<template #title>
+							<div class="flex justify-between items-center">
+								<span class="font-semibold text-lg truncate">{{
+									biz.name
+								}}</span>
+								<Tag severity="danger" value="Rejected" />
+							</div>
+						</template>
+						<template #content>
+							<div class="space-y-2 mt-2 text-gray-600">
+								<p class="text-sm">📍 {{ biz.address }}</p>
+								<p class="text-sm">📧 {{ biz.support_email }}</p>
+								<p class="text-sm">📞 {{ biz.support_phone }}</p>
+								<p class="text-xs text-gray-400 pt-2 border-t">
+									Registered by:
+									<span class="font-medium">{{
+										biz.registered_by?.registered_by || "N/A"
+									}}</span>
+								</p>
+							</div>
+							<div class="mt-3 flex justify-end">
+								<Button
+									label="Approve"
+									class="!bg-green-600 hover:!bg-green-700 text-white font-medium px-4 py-2 rounded-md"
+									@click="approveBusiness(biz.id)"
+								/>
+							</div>
+						</template>
+					</Card>
+				</div>
+				<p v-else class="text-gray-500 text-center py-8">
+					No rejected businesses found.
 				</p>
 			</TabPanel>
 		</TabView>

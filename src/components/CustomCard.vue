@@ -39,6 +39,9 @@ const emit = defineEmits(["edit", "delete"]);
 			>
 				{{ user.role }}
 			</span>
+			<div class="mt-2 text-sm text-gray-600">
+				{{ user.status_reason || "No status reason provided." }}
+			</div>
 		</div>
 
 		<div class="mt-4 flex justify-end space-x-3">

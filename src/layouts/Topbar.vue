@@ -7,8 +7,8 @@
 		</button>
 
 		<UserProfileMenu
-			name="John Doe"
-			email="johndoe@example.com"
+			:name="user?.first_name + ' ' + user?.last_name"
+			:email="user?.email"
 			@logout="logout"
 		/>
 	</div>
@@ -20,9 +20,24 @@ import UserProfileMenu from "../components/UserProfileMenu.vue";
 export default {
 	name: "Topbar",
 	components: { UserProfileMenu },
+	data() {
+		return {
+			user: null
+		};
+	},
+	created() {
+		// Load user info from localStorage
+		const savedUser = localStorage.getItem("user");
+		if (savedUser) {
+			this.user = JSON.parse(savedUser);
+		}
+	},
 	methods: {
 		logout() {
-			alert("Logged out!");
+			// Clear storage on logout
+			localStorage.removeItem("token");
+			localStorage.removeItem("user");
+			this.$router.push("/signin");
 		}
 	}
 };

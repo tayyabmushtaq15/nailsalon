@@ -5,17 +5,17 @@ import Button from "primevue/button";
 import Card from "primevue/card";
 import { useToast } from "primevue/usetoast";
 
-import UserForm from "../../components/UserForm.vue";
 import BusinessForm from "../../components/BusinessForm.vue";
 import { useBusinessStore } from "../../stores/businessStore";
 import { useBusinessUserStore } from "../../stores/businessUserStore";
-import router from "../../router";
+import BusinessUserForm from "../../components/BusinessUserForm.vue";
+import { useRouter } from "vue-router";
 
 const activeStep = ref(0);
 const businessStore = useBusinessStore();
 const businessUserStore = useBusinessUserStore();
 const toast = useToast();
-
+const router = useRouter();
 const props = defineProps({
 	userData: {
 		type: Object,
@@ -75,7 +75,7 @@ async function submitBusiness() {
 
 		<!-- Step 1: User -->
 		<div v-if="activeStep === 0">
-			<UserForm
+			<BusinessUserForm
 				:initialData="businessUserStore.userDetail"
 				@submit="nextStepUser"
 				buttonText="Next"
