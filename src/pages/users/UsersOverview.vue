@@ -10,15 +10,6 @@ const userStore = useUserStore();
 const toast = useToast();
 const router = useRouter();
 
-const columns = [
-	{ field: "first_name", header: "First Name", sortable: false },
-	{ field: "last_name", header: "Last Name", sortable: false },
-	{ field: "email", header: "Email", sortable: false },
-	{ field: "role", header: "Role", sortable: false },
-	{ field: "status", header: "Status", sortable: false },
-	{ field: "phone", header: "Phone", sortable: false }
-];
-
 onMounted(() => {
 	userStore.fetchUsers();
 });

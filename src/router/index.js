@@ -146,8 +146,59 @@ const routes = [
 			{
 				path: "banners",
 				name: "Banners",
-				component: () => import("../pages/Banners.vue"),
+				component: () => import("../pages/banners/Banners.vue"),
+				children: [
+					{
+						path: "",
+						name: "BannersOverview",
+						component: () => import("../pages/banners/BannersOverview.vue"),
+						meta: { breadcrumb: "Banner Templates" }
+					},
+					{
+						path: "add-banner-template",
+						name: "AddBanner",
+						component: () => import("../pages/banners/AddBanners.vue"),
+						meta: { breadcrumb: "Add banner templates" }
+					},
+					{
+						path: "edit-banner-template/:id",
+						name: "EditBanner",
+						component: () => import("../pages/banners/EditBanners.vue"),
+						meta: { breadcrumb: "Edit Banners" }
+					}
+				],
 				meta: { breadcrumb: "Banners" }
+			},
+			{
+				path: "printing-service-providers",
+				component: () =>
+					import("../pages/printing-service-providers/PrintingSP.vue"),
+				children: [
+					{
+						path: "",
+						name: "PrintingSPOverview",
+						component: () =>
+							import(
+								"../pages/printing-service-providers/PrintingSPOverview.vue"
+							),
+						meta: { breadcrumb: "Printing service providers list" }
+					},
+					{
+						path: "add-printingSP",
+						name: "AddprintingSP",
+						component: () =>
+							import("../pages/printing-service-providers/AddPrintingSP.vue"),
+						meta: { breadcrumb: "Add printing Service providers" }
+					},
+					{
+						path: "edit-printingSP/:id",
+						name: "EditPrintingSP",
+						component: () =>
+							import("../pages/printing-service-providers/EditPrintingSP.vue"),
+						meta: { breadcrumb: "Edit printing service providers" }
+					}
+				],
+				meta: { breadcrumb: "Printing service providers" }
 			},
 			{
 				path: "settings",
