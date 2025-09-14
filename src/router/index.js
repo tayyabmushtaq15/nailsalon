@@ -146,29 +146,30 @@ const routes = [
 			{
 				path: "banners",
 				name: "Banners",
-				component: () => import("../pages/banners/Banners.vue"),
+				component: () => import("../pages/banner/Banners.vue"),
 				children: [
 					{
 						path: "",
 						name: "BannersOverview",
-						component: () => import("../pages/banners/BannersOverview.vue"),
+						component: () => import("../pages/banner/BannersOverview.vue"),
 						meta: { breadcrumb: "Banner Templates" }
 					},
 					{
 						path: "add-banner-template",
 						name: "AddBanner",
-						component: () => import("../pages/banners/AddBanners.vue"),
+						component: () => import("../pages/banner/AddBanners.vue"),
 						meta: { breadcrumb: "Add banner templates" }
 					},
 					{
 						path: "edit-banner-template/:id",
 						name: "EditBanner",
-						component: () => import("../pages/banners/EditBanners.vue"),
+						component: () => import("../pages/banner/EditBanners.vue"),
 						meta: { breadcrumb: "Edit Banners" }
 					}
 				],
 				meta: { breadcrumb: "Banners" }
 			},
+
 			{
 				path: "printing-service-providers",
 				component: () =>
@@ -199,6 +200,35 @@ const routes = [
 					}
 				],
 				meta: { breadcrumb: "Printing service providers" }
+			},
+			{
+				path: "banner-req",
+				name: "BannersReq",
+				component: () => import("../pages/banner-requests/BannerReq.vue"),
+				children: [
+					{
+						path: "",
+						name: "BannerReqOverview",
+						component: () =>
+							import("../pages/banner-requests/BannerReqOverview.vue"),
+						meta: { breadcrumb: "Banner requests" }
+					},
+					{
+						path: "add-banner-request",
+						name: "AddBannerReq",
+						component: () =>
+							import("../pages/banner-requests/AddBannersReq.vue"),
+						meta: { breadcrumb: "Add banner request" }
+					},
+					{
+						path: "edit-banner-request/:id",
+						name: "EditBannerReq",
+						component: () =>
+							import("../pages/banner-requests/EditBannerReq.vue"),
+						meta: { breadcrumb: "Edit Banners" }
+					}
+				],
+				meta: { breadcrumb: "Banner request" }
 			},
 			{
 				path: "settings",

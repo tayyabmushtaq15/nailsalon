@@ -40,7 +40,7 @@ const emit = defineEmits(["edit", "delete"]);
 				{{ user.role }}
 			</span>
 			<div class="mt-2 text-sm text-gray-600">
-				{{ user.status_reason || "No status reason provided." }}
+				{{ user.status_reason || "" }}
 			</div>
 		</div>
 
