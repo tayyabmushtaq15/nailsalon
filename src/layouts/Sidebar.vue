@@ -86,6 +86,8 @@ export default {
 				},
 
 				{ to: "/banners", label: "Banner Templates", icon: "pi-image" },
+				{ to: "/banner-req", label: "Banner Request", icon: "pi-images" },
+
 				{ to: "/settings", label: "Settings", icon: "pi-cog" }
 			]
 		};
