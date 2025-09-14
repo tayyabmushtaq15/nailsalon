@@ -79,8 +79,13 @@ export default {
 					label: "Available Subscriptions",
 					icon: "pi-credit-card"
 				},
+				{
+					to: "/printing-service-providers",
+					label: "Printing service providers",
+					icon: "pi-print"
+				},
 
-				{ to: "/banners", label: "Banners", icon: "pi-image" },
+				{ to: "/banners", label: "Banner Templates", icon: "pi-image" },
 				{ to: "/settings", label: "Settings", icon: "pi-cog" }
 			]
 		};
