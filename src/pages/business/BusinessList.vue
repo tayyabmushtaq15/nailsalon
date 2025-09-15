@@ -20,7 +20,7 @@ const router = useRouter();
 async function fetchBusinesses(type) {
 	try {
 		loading.value = true;
-		if (type === "approved") {
+		if (type === "all") {
 			const res = await api.get("/businesses");
 			businesses.value = res?.data?.businesses || [];
 		}
@@ -54,7 +54,8 @@ async function approveBusiness(businessId) {
 			life: 3000
 		});
 		fetchBusinesses("approval");
-		fetchBusinesses("approved");
+		fetchBusinesses("all");
+		fetchBusinesses("rejected");
 	} catch (err) {
 		toast.add({
 			severity: "error",
@@ -74,7 +75,8 @@ async function deactivateBusiness(businessId) {
 			detail: "Business deactivated successfully",
 			life: 3000
 		});
-		fetchBusinesses("approved");
+		fetchBusinesses("all");
+		fetchBusinesses("approval");
 		fetchBusinesses("rejected");
 	} catch (err) {
 		toast.add({
@@ -92,14 +94,13 @@ const goToAddBusiness = () => {
 
 // Load initial tabs
 onMounted(() => {
-	fetchBusinesses("approved");
+	fetchBusinesses("all");
 });
 
 // Handle tab change
 const onTabChange = (e) => {
 	activeIndex.value = e.index;
-	if (e.index === 0 && businesses.value.length === 0)
-		fetchBusinesses("approved");
+	if (e.index === 0 && businesses.value.length === 0) fetchBusinesses("all");
 	if (e.index === 1 && awaitingBusinesses.value.length === 0)
 		fetchBusinesses("approval");
 	if (e.index === 2 && rejectedBusinesses.value.length === 0)
@@ -120,8 +121,8 @@ const onTabChange = (e) => {
 		</div>
 
 		<TabView v-model:activeIndex="activeIndex" @tab-change="onTabChange">
-			<!-- Approved -->
-			<TabPanel header="Approved">
+			<!-- all -->
+			<TabPanel header="All">
 				<div v-if="loading" class="text-center py-8 text-gray-500">
 					Loading...
 				</div>
@@ -144,7 +145,7 @@ const onTabChange = (e) => {
 								}}</span>
 								<Tag
 									:severity="
-										biz.status === 'approved'
+										biz.status === 'all'
 											? 'success'
 											: biz.status === 'rejected'
 												? 'danger'
