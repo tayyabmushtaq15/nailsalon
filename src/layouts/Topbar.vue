@@ -29,7 +29,7 @@ export default {
 		// Load user info from localStorage
 		const savedUser = localStorage.getItem("user");
 		if (savedUser) {
-			this.user = JSON.parse(savedUser);
+			this.user = JSON?.parse(savedUser);
 		}
 	},
 	methods: {
