@@ -1,8 +1,11 @@
 <template>
 	<div
-		class="topbar h-12 bg-gray-50 flex items-center justify-between px-4 shadow"
+		class="topbar h-12 bg-gray-50 dark:bg-gray-700 flex items-center justify-between px-4 shadow transition-colors"
 	>
-		<button class="md:hidden text-gray-700" @click="$emit('toggleSidebar')">
+		<button
+			class="md:hidden text-gray-700 dark:text-gray-300"
+			@click="$emit('toggleSidebar')"
+		>
 			<i class="pi pi-bars text-xl"></i>
 		</button>
 
@@ -21,20 +24,14 @@ export default {
 	name: "Topbar",
 	components: { UserProfileMenu },
 	data() {
-		return {
-			user: null
-		};
+		return { user: null };
 	},
 	created() {
-		// Load user info from localStorage
 		const savedUser = localStorage.getItem("user");
-		if (savedUser) {
-			this.user = JSON.parse(savedUser);
-		}
+		if (savedUser) this.user = JSON.parse(savedUser);
 	},
 	methods: {
 		logout() {
-			// Clear storage on logout
 			localStorage.removeItem("token");
 			localStorage.removeItem("user");
 			this.$router.push("/signin");

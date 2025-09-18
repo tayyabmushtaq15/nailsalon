@@ -54,9 +54,11 @@ const confirmDelete = async () => {
 <template>
 	<div class="p-1">
 		<div class="flex flex-row justify-between items-end mb-2 p-2">
-			<h2 class="text-xl font-semibold mb-4">Users</h2>
+			<h2 class="text-xl font-semibold mb-4 text-gray-900 dark:!text-gray-100">
+				Users
+			</h2>
 			<Button
-				class="w-auto rounded-lg p-2 !bg-primary hover:!bg-secondary text-white font-semibold text-md tracking-wide transition duration-300"
+				class="w-auto rounded-lg p-2 !bg-primary hover:!bg-secondary !text-white font-semibold text-md tracking-wide transition duration-300 !border !border-primary hover:!border-secondary dark:!border-white"
 				@click="router.push('/users/add-users')"
 			>
 				+ Add New User
@@ -77,7 +79,9 @@ const confirmDelete = async () => {
 			/>
 		</div>
 
-		<p v-else class="text-center text-gray-500 mt-6">No users found.</p>
+		<p v-else class="text-center text-gray-500 dark:!text-gray-400 mt-6">
+			No users found.
+		</p>
 
 		<ConfirmationModal
 			v-model:visible="showConfirmModal"

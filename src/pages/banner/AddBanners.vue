@@ -36,7 +36,7 @@ function handleBack() {
 </script>
 
 <template>
-	<div class="p-6 mx-auto bg-white shadow-md rounded-lg">
+	<div class="p-6 mx-auto bg-white shadow-md rounded-lg dark:bg-gray-900">
 		<BannerTemplateForm
 			:isBackButton="true"
 			ButtonText="Save"

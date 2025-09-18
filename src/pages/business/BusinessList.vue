@@ -111,9 +111,13 @@ const onTabChange = (e) => {
 <template>
 	<div class="p-1">
 		<div class="flex flex-row justify-between items-center mb-2">
-			<h2 class="text-2xl font-semibold mb-4">Businesses</h2>
+			<h2
+				class="text-2xl font-semibold mb-4 !text-gray-800 dark:!text-gray-100"
+			>
+				Businesses
+			</h2>
 			<Button
-				class="w-auto rounded-lg p-2 !bg-primary hover:!bg-secondary text-white font-semibold text-md tracking-wide transition duration-300"
+				class="w-auto rounded-lg p-2 !bg-primary hover:!bg-secondary !text-white font-semibold text-md tracking-wide transition duration-300 !border !border-primary hover:!border-secondary dark:!border-white"
 				@click="goToAddBusiness"
 			>
 				+ Add New Business
@@ -121,28 +125,33 @@ const onTabChange = (e) => {
 		</div>
 
 		<TabView v-model:activeIndex="activeIndex" @tab-change="onTabChange">
-			<!-- all -->
+			<!-- All -->
 			<TabPanel header="All">
-				<div v-if="loading" class="text-center py-8 text-gray-500">
+				<div
+					v-if="loading"
+					class="text-center py-8 !text-gray-500 dark:!text-gray-400 bg-white dark:bg-slate-950"
+				>
 					Loading...
 				</div>
 				<div
 					v-else-if="businesses.length"
-					class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+					class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-white dark:bg-slate-950"
 				>
 					<Card
 						v-for="biz in businesses"
 						:key="biz.id"
-						class="shadow-sm border rounded-2xl hover:shadow-lg transition p-4 relative"
+						class="shadow-sm border rounded-2xl hover:shadow-lg transition p-4 relative !bg-white dark:!bg-gray-800 !border-gray-200 dark:!border-gray-700"
 					>
 						<template #title>
 							<div
 								class="flex justify-between items-center cursor-pointer"
 								@click="router.push(`/business/business-details/${biz.id}`)"
 							>
-								<span class="font-semibold text-lg truncate">{{
-									biz.name
-								}}</span>
+								<span
+									class="font-semibold text-lg truncate !text-gray-800 dark:!text-gray-100"
+								>
+									{{ biz.name }}
+								</span>
 								<Tag
 									:severity="
 										biz.status === 'all'
@@ -159,13 +168,15 @@ const onTabChange = (e) => {
 
 						<template #content>
 							<div
-								class="space-y-2 mt-2 text-gray-600 cursor-pointer"
+								class="space-y-2 mt-2 cursor-pointer !text-gray-600 dark:!text-gray-300"
 								@click="router.push(`/business/business-details/${biz.id}`)"
 							>
 								<p class="text-sm">📍 {{ biz.address }}</p>
 								<p class="text-sm">📧 {{ biz.support_email }}</p>
 								<p class="text-sm">📞 {{ biz.support_phone }}</p>
-								<p class="text-xs text-gray-400 pt-2 border-t">
+								<p
+									class="text-xs pt-2 border-t !text-gray-400 dark:!text-gray-500"
+								>
 									Registered by:
 									<span class="font-medium">{{
 										biz.registered_by?.registered_by || "N/A"
@@ -175,21 +186,24 @@ const onTabChange = (e) => {
 							<div v-if="biz.status === 'ACTIVE'" class="mt-3 flex justify-end">
 								<Button
 									label="Deactivate"
-									class="!bg-red-600 hover:!bg-red-700 text-white font-medium px-4 py-2 rounded-md"
+									class="!bg-red-600 hover:!bg-red-700 !text-white font-medium px-4 py-2 rounded-md"
 									@click.stop="deactivateBusiness(biz.id)"
 								/>
 							</div>
 						</template>
 					</Card>
 				</div>
-				<p v-else class="text-gray-500 text-center py-8">
+				<p v-else class="!text-gray-500 dark:!text-gray-400 text-center py-8">
 					No businesses found.
 				</p>
 			</TabPanel>
 
 			<!-- Awaiting Approval -->
 			<TabPanel header="Awaiting Approval">
-				<div v-if="loading" class="text-center py-8 text-gray-500">
+				<div
+					v-if="loading"
+					class="text-center py-8 !text-gray-500 dark:!text-gray-400"
+				>
 					Loading...
 				</div>
 				<div
@@ -199,22 +213,26 @@ const onTabChange = (e) => {
 					<Card
 						v-for="biz in awaitingBusinesses"
 						:key="biz.id"
-						class="shadow-sm border rounded-2xl hover:shadow-lg transition p-4 relative"
+						class="shadow-sm border rounded-2xl hover:shadow-lg transition p-4 relative !bg-white dark:!bg-gray-800 !border-gray-200 dark:!border-gray-700"
 					>
 						<template #title>
 							<div class="flex justify-between items-center">
-								<span class="font-semibold text-lg truncate">{{
-									biz.name
-								}}</span>
+								<span
+									class="font-semibold text-lg truncate !text-gray-800 dark:!text-gray-100"
+								>
+									{{ biz.name }}
+								</span>
 								<Tag severity="warn" value="Pending" />
 							</div>
 						</template>
 						<template #content>
-							<div class="space-y-2 mt-2 text-gray-600">
+							<div class="space-y-2 mt-2 !text-gray-600 dark:!text-gray-300">
 								<p class="text-sm">📍 {{ biz.address }}</p>
 								<p class="text-sm">📧 {{ biz.support_email }}</p>
 								<p class="text-sm">📞 {{ biz.support_phone }}</p>
-								<p class="text-xs text-gray-400 pt-2 border-t">
+								<p
+									class="text-xs pt-2 border-t !text-gray-400 dark:!text-gray-500"
+								>
 									Registered by:
 									<span class="font-medium">{{
 										biz.registered_by?.registered_by || "N/A"
@@ -224,21 +242,24 @@ const onTabChange = (e) => {
 							<div class="mt-3 flex justify-end">
 								<Button
 									label="Approve"
-									class="!bg-green-600 hover:!bg-green-700 text-white font-medium px-4 py-2 rounded-md"
+									class="!bg-green-600 hover:!bg-green-700 !text-white font-medium px-4 py-2 rounded-md"
 									@click="approveBusiness(biz.id)"
 								/>
 							</div>
 						</template>
 					</Card>
 				</div>
-				<p v-else class="text-gray-500 text-center py-8">
+				<p v-else class="!text-gray-500 dark:!text-gray-400 text-center py-8">
 					No businesses awaiting approval.
 				</p>
 			</TabPanel>
 
 			<!-- Rejected -->
 			<TabPanel header="Rejected">
-				<div v-if="loading" class="text-center py-8 text-gray-500">
+				<div
+					v-if="loading"
+					class="text-center py-8 !text-gray-500 dark:!text-gray-400"
+				>
 					Loading...
 				</div>
 				<div
@@ -248,22 +269,26 @@ const onTabChange = (e) => {
 					<Card
 						v-for="biz in rejectedBusinesses"
 						:key="biz.id"
-						class="shadow-sm border rounded-2xl hover:shadow-lg transition p-4 relative"
+						class="shadow-sm border rounded-2xl hover:shadow-lg transition p-4 relative !bg-white dark:!bg-gray-800 !border-gray-200 dark:!border-gray-700"
 					>
 						<template #title>
 							<div class="flex justify-between items-center">
-								<span class="font-semibold text-lg truncate">{{
-									biz.name
-								}}</span>
+								<span
+									class="font-semibold text-lg truncate !text-gray-800 dark:!text-gray-100"
+								>
+									{{ biz.name }}
+								</span>
 								<Tag severity="danger" value="Rejected" />
 							</div>
 						</template>
 						<template #content>
-							<div class="space-y-2 mt-2 text-gray-600">
+							<div class="space-y-2 mt-2 !text-gray-600 dark:!text-gray-300">
 								<p class="text-sm">📍 {{ biz.address }}</p>
 								<p class="text-sm">📧 {{ biz.support_email }}</p>
 								<p class="text-sm">📞 {{ biz.support_phone }}</p>
-								<p class="text-xs text-gray-400 pt-2 border-t">
+								<p
+									class="text-xs pt-2 border-t !text-gray-400 dark:!text-gray-500"
+								>
 									Registered by:
 									<span class="font-medium">{{
 										biz.registered_by?.registered_by || "N/A"
@@ -273,14 +298,14 @@ const onTabChange = (e) => {
 							<div class="mt-3 flex justify-end">
 								<Button
 									label="Approve"
-									class="!bg-green-600 hover:!bg-green-700 text-white font-medium px-4 py-2 rounded-md"
+									class="!bg-green-600 hover:!bg-green-700 !text-white font-medium px-4 py-2 rounded-md"
 									@click="approveBusiness(biz.id)"
 								/>
 							</div>
 						</template>
 					</Card>
 				</div>
-				<p v-else class="text-gray-500 text-center py-8">
+				<p v-else class="!text-gray-500 dark:!text-gray-400 text-center py-8">
 					No rejected businesses found.
 				</p>
 			</TabPanel>

@@ -6,18 +6,21 @@
 		:header="title"
 		:closable="false"
 		:style="{ width: '25rem' }"
+		class="dark:bg-gray-800 dark:text-gray-100"
 	>
-		<p class="m-0">{{ message }}</p>
+		<p class="m-0 text-gray-800 dark:text-gray-200">
+			{{ message }}
+		</p>
 
 		<template #footer>
 			<Button
 				label="Cancel"
-				class="!border !border-gray-300 !text-gray-700 !bg-transparent hover:!bg-primary hover:!text-white rounded-md px-4 py-2"
+				class="!border !border-gray-300 !text-gray-700 !bg-transparent hover:!bg-primary hover:!text-white dark:!border-gray-600 dark:!text-gray-200 dark:hover:!bg-primary rounded-md px-4 py-2"
 				@click="cancel"
 			/>
 			<Button
 				label="Confirm"
-				class="!bg-red-600 hover:!bg-red-700 text-white"
+				class="!bg-red-600 hover:!bg-red-700 text-white dark:!bg-red-500 dark:hover:!bg-red-600 dark:!border-gray-600"
 				@click="confirm"
 			/>
 		</template>

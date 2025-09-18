@@ -5,3 +5,30 @@
 body {
 	@apply font-poppins;
 }
+/* === TabView + TabPanel Light/Dark Theme Overrides === */
+
+/* Whole TabView container */
+.p-tabview {
+	@apply bg-white dark:bg-slate-900 rounded-xl shadow-sm;
+}
+
+/* Tab headers wrapper */
+.p-tabview-nav {
+	@apply bg-gray-100 dark:bg-slate-800 rounded-t-xl;
+}
+
+/* Individual tabs */
+.p-tabview-nav li .p-tabview-nav-link {
+	@apply bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-200 
+         px-4 py-2 transition rounded-t-lg;
+}
+
+/* Active tab */
+.p-tabview-nav li.p-highlight .p-tabview-nav-link {
+	@apply bg-white dark:bg-slate-900 text-primary font-semibold shadow-md;
+}
+
+/* Tab panels (the content below tabs) */
+.p-tabview-panels {
+	@apply bg-white dark:bg-slate-900 rounded-b-xl p-4;
+}

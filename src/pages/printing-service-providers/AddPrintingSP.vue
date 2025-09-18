@@ -37,7 +37,7 @@ function handleBack() {
 </script>
 
 <template>
-	<div class="mx-auto p-6">
+	<div class="mx-auto p-6 bg-white dark:bg-gray-900">
 		<h1 class="text-2xl font-bold mb-6">Add Service Provider</h1>
 
 		<ServiceProviderForm

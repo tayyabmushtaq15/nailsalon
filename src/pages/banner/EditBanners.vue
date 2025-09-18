@@ -62,7 +62,7 @@ const handleBack = () => {
 </script>
 
 <template>
-	<div class="p-6 mx-auto bg-white shadow-md rounded-lg">
+	<div class="p-6 mx-auto bg-white shadow-md rounded-lg dark:bg-gray-900">
 		<h2 class="text-2xl font-semibold mb-4">Edit Banner Template</h2>
 
 		<div v-if="loading" class="text-center py-10 text-gray-500">

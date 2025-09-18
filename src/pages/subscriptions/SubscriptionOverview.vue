@@ -52,7 +52,7 @@ const goToEditSubscription = (subscription) => {
 	<div class="flex flex-row justify-between items-center mb-2">
 		<h2 class="text-xl font-semibold mb-4">Subscriptions</h2>
 		<Button
-			class="w-auto rounded-lg p-2 !bg-primary hover:!bg-secondary text-white font-semibold text-md tracking-wide transition duration-300"
+			class="w-auto rounded-lg p-2 !bg-primary hover:!bg-secondary !text-white font-semibold text-md tracking-wide transition duration-300 !border !border-primary hover:!border-secondary dark:!border-white"
 			@click="goToAddSubscription"
 		>
 			+ Add New Subscription

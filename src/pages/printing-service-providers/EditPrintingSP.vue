@@ -1,5 +1,5 @@
 <template>
-	<div class="p-6 mx-auto bg-white shadow-md rounded-lg">
+	<div class="p-6 mx-auto shadow-md rounded-lg bg-white dark:bg-gray-900">
 		<ServiceProviderForm
 			:isBackButton="true"
 			:initialData="form"

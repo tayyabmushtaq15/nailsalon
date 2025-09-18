@@ -1,12 +1,19 @@
 <template>
-	<div class="p-6 bg-gray-50 min-h-screen">
-		<h2 class="text-2xl font-semibold mb-4">Edit Banner Request</h2>
+	<div class="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors">
+		<h2 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+			Edit Banner Request
+		</h2>
 
-		<div class="bg-white p-6 rounded-lg shadow-md space-y-6" v-if="loaded">
+		<div
+			class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md space-y-6 transition-colors"
+			v-if="loaded"
+		>
 			<div class="grid gap-4">
 				<!-- Business Dropdown -->
 				<div>
-					<label>Business</label>
+					<label class="block text-gray-700 dark:text-gray-300 mb-1"
+						>Business</label
+					>
 					<Dropdown
 						v-model="form.business_id"
 						:options="businessOptions"
@@ -19,7 +26,9 @@
 
 				<!-- Template Dropdown -->
 				<div>
-					<label>Template</label>
+					<label class="block text-gray-700 dark:text-gray-300 mb-1"
+						>Template</label
+					>
 					<Dropdown
 						v-model="form.template_id"
 						:options="templateOptions"
@@ -32,13 +41,21 @@
 
 				<!-- Transaction ID -->
 				<div>
-					<label>Transaction ID</label>
-					<InputText v-model="form.transaction_id" class="w-full" />
+					<label class="block text-gray-700 dark:text-gray-300 mb-1"
+						>Transaction ID</label
+					>
+					<InputText
+						v-model="form.transaction_id"
+						class="w-full"
+						placeholder="Enter transaction ID"
+					/>
 				</div>
 
 				<!-- Status -->
 				<div>
-					<label>Status</label>
+					<label class="block text-gray-700 dark:text-gray-300 mb-1"
+						>Status</label
+					>
 					<Dropdown
 						v-model="form.status"
 						:options="statusOptions"
@@ -57,7 +74,7 @@
 				<Button
 					label="Update"
 					icon="pi pi-check"
-					class="!bg-primary !text-white"
+					class="!bg-primary hover:!bg-secondary !text-white transition-colors"
 					@click="handleSubmit"
 				/>
 			</div>
