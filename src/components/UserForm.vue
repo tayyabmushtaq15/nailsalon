@@ -62,83 +62,112 @@ function handleSubmit() {
 </script>
 
 <template>
-	<h2 class="text-xl font-semibold mb-4">{{ title }}</h2>
+	<h2 class="text-xl font-semibold mb-4 !text-gray-900 dark:!text-gray-100">
+		{{ title }}
+	</h2>
 
 	<div
-		class="p-fluid grid gap-4 border-collapse border border-1 border-gray-300 rounded-md pl-4 pt-2 pb-2 pr-4"
+		class="p-fluid grid gap-4 border-collapse border border-gray-300 dark:border-gray-600 rounded-md pl-4 pt-2 pb-2 pr-4 bg-white dark:bg-gray-800"
 	>
+		<!-- First + Last Name -->
 		<div class="col-12 flex flex-wrap gap-4">
 			<div class="flex-1 min-w-[200px]">
-				<label for="first_name">First Name</label>
+				<label
+					for="first_name"
+					class="block mb-1 text-gray-700 dark:text-gray-300"
+					>First Name</label
+				>
 				<InputText
 					id="first_name"
 					v-model="form.first_name"
 					placeholder="Enter first name"
-					class="w-full"
+					class="w-full !bg-white !text-gray-900 dark:!bg-gray-700 dark:!text-gray-100 dark:!placeholder-gray-400"
 				/>
 			</div>
 
 			<div class="flex-1 min-w-[200px]">
-				<label for="last_name">Last Name</label>
+				<label
+					for="last_name"
+					class="block mb-1 text-gray-700 dark:text-gray-300"
+					>Last Name</label
+				>
 				<InputText
 					id="last_name"
 					v-model="form.last_name"
 					placeholder="Enter last name"
-					class="w-full"
+					class="w-full !text-gray-900 !bg-white dark:!bg-gray-700 dark:!text-gray-100 dark:!placeholder-gray-400"
 				/>
 			</div>
 		</div>
 
+		<!-- Email + Password -->
 		<div class="col-12 flex flex-wrap gap-4">
 			<div class="flex-1 min-w-[200px]">
-				<label for="email">Email</label>
+				<label for="email" class="block mb-1 text-gray-700 dark:text-gray-300"
+					>Email</label
+				>
 				<InputText
 					type="email"
 					id="email"
 					v-model="form.email"
 					placeholder="Enter email"
-					class="w-full"
+					class="w-full !bg-white !text-gray-900 dark:!bg-gray-700 dark:!text-gray-100 dark:!placeholder-gray-400"
 				/>
 			</div>
 
 			<div class="flex-1 min-w-[200px]">
-				<label for="password">Password</label>
+				<label
+					for="password"
+					class="block mb-1 text-gray-700 dark:text-gray-300"
+					>Password</label
+				>
 				<InputText
 					type="password"
 					id="password"
 					v-model="form.password"
 					feedback="false"
 					placeholder="Enter password"
-					class="w-full"
+					class="w-full !bg-white !text-gray-900 dark:!bg-gray-700 dark:!text-gray-100 dark:!placeholder-gray-400"
 				/>
 			</div>
 		</div>
 
+		<!-- Country Code + Phone -->
 		<div class="col-12 flex flex-wrap gap-4">
 			<div class="w-full md:w-3/12">
-				<label for="country_code">Country Code</label>
+				<label
+					for="country_code"
+					class="block mb-1 text-gray-700 dark:text-gray-300"
+					>Country Code</label
+				>
 				<InputText
 					id="country_code"
 					v-model="form.country_code"
 					placeholder="+1"
-					class="w-full"
+					class="w-full !bg-white !text-gray-900 dark:!bg-gray-700 dark:!text-gray-100 dark:!placeholder-gray-400"
 				/>
 			</div>
 
 			<div class="w-full md:flex-1">
-				<label for="phone">Phone</label>
+				<label for="phone" class="block mb-1 text-gray-700 dark:text-gray-300"
+					>Phone</label
+				>
 				<InputText
 					type="number"
 					id="phone"
 					v-model="form.phone"
 					placeholder="Enter phone number"
-					class="w-full"
+					class="w-full !bg-white !text-gray-900 dark:!bg-gray-700 dark:!text-gray-100 dark:!placeholder-gray-400"
 				/>
 			</div>
 		</div>
+
+		<!-- Role -->
 		<div class="col-12 flex flex-wrap gap-4">
 			<div class="flex-1 min-w-[200px]">
-				<label for="role">Role</label>
+				<label for="role" class="block mb-1 text-gray-700 dark:text-gray-300"
+					>Role</label
+				>
 				<Dropdown
 					id="role"
 					v-model="form.role"
@@ -146,12 +175,16 @@ function handleSubmit() {
 					optionLabel="label"
 					optionValue="value"
 					placeholder="Select role"
-					class="w-full"
+					class="w-full !bg-white !text-gray-900 dark:!bg-gray-700 dark:!text-gray-100"
 				/>
 			</div>
 		</div>
+
+		<!-- Status -->
 		<div class="col-12">
-			<label for="status">Status</label>
+			<label for="status" class="block mb-1 !text-gray-700 dark:!text-gray-300"
+				>Status</label
+			>
 			<Dropdown
 				id="status"
 				v-model="form.status"
@@ -159,20 +192,27 @@ function handleSubmit() {
 				optionLabel="label"
 				optionValue="value"
 				placeholder="Select status"
-				class="w-full"
+				class="w-full !bg-white !text-gray-900 dark:!bg-gray-700 dark:!text-gray-100"
 			/>
 		</div>
+
+		<!-- Status Reason -->
 		<div v-if="isInactive" class="flex-1 min-w-[200px]">
-			<label for="status_reason">Status reason</label>
+			<label
+				for="status_reason"
+				class="block mb-1 text-gray-700 dark:text-gray-300"
+				>Status reason</label
+			>
 			<InputText
 				id="status_reason"
 				v-model="form.status_reason"
 				placeholder="Enter status reason"
-				class="w-full"
+				class="w-full !bg-white !text-gray-900 dark:!bg-gray-700 dark:!text-gray-100 dark:!placeholder-gray-400"
 			/>
 		</div>
 
-		<div class="col-12 flex justify-content-end md:justify-content-end">
+		<!-- Submit -->
+		<div class="col-12 flex justify-end">
 			<Button
 				:label="buttonText"
 				:icon="
@@ -182,7 +222,7 @@ function handleSubmit() {
 							? 'pi pi-check'
 							: 'pi pi-arrow-right'
 				"
-				class="w-full md:w-auto !border hover:!border-primary hover:!text-primary hover:!bg-white !bg-primary !text-white !border-white rounded-md px-4 py-2"
+				class="w-full md:w-auto !border hover:!border-primary hover:!text-primary hover:!bg-white !bg-primary !text-white !border-white dark:hover:!bg-gray-800"
 				@click="handleSubmit"
 			/>
 		</div>

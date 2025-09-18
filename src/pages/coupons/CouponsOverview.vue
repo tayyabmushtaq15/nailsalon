@@ -74,9 +74,11 @@ const confirmDeleteCoupon = async () => {
 <template>
 	<div class="p-6">
 		<div class="flex items-center justify-between mb-2">
-			<h2 class="text-xl font-bold mb-6 text-gray-800">🎟 Available Coupons</h2>
+			<h2 class="text-xl font-bold mb-6 text-gray-800 dark:text-gray-100">
+				🎟 Available Coupons
+			</h2>
 			<Button
-				class="w-auto rounded-lg p-2 !bg-primary hover:!bg-secondary text-white font-semibold text-md tracking-wide transition duration-300"
+				class="w-auto rounded-lg p-2 !bg-primary hover:!bg-secondary !text-white font-semibold text-md tracking-wide transition duration-300 !border !border-primary hover:!border-secondary dark:!border-white"
 				@click="goToAddCoupons"
 			>
 				+ Add New Coupons
@@ -88,14 +90,14 @@ const confirmDeleteCoupon = async () => {
 			<div
 				v-for="coupon in coupons"
 				:key="coupon.id"
-				class="relative bg-gradient-to-r from-indigo-50 to-blue-100 shadow-lg rounded-2xl overflow-hidden border-2 border-dashed border-indigo-400"
+				class="relative bg-gradient-to-r from-indigo-50 to-blue-100 dark:from-slate-800 dark:to-slate-900 shadow-lg rounded-2xl overflow-hidden border-2 border-dashed border-indigo-400 dark:border-indigo-600"
 			>
 				<!-- Cutout Edges -->
 				<div
-					class="absolute top-1/2 left-0 -translate-y-1/2 w-6 h-6 bg-white rounded-full border border-indigo-200"
+					class="absolute top-1/2 left-0 -translate-y-1/2 w-6 h-6 bg-white dark:bg-slate-900 rounded-full border border-indigo-200 dark:border-indigo-600"
 				></div>
 				<div
-					class="absolute top-1/2 right-0 -translate-y-1/2 w-6 h-6 bg-white rounded-full border border-indigo-200"
+					class="absolute top-1/2 right-0 -translate-y-1/2 w-6 h-6 bg-white dark:bg-slate-900 rounded-full border border-indigo-200 dark:border-indigo-600"
 				></div>
 
 				<!-- Discount Section -->
@@ -111,8 +113,8 @@ const confirmDeleteCoupon = async () => {
 				</div>
 
 				<!-- Details -->
-				<div class="p-9 text-gray-700">
-					<h3 class="text-xl font-bold text-indigo-700">
+				<div class="p-9 text-gray-700 dark:text-gray-300">
+					<h3 class="text-xl font-bold text-indigo-700 dark:text-indigo-400">
 						{{ coupon.business?.name }}
 					</h3>
 					<p class="mt-1 text-sm">
@@ -121,19 +123,21 @@ const confirmDeleteCoupon = async () => {
 							{{ new Date(coupon.valid_till).toLocaleDateString() }}
 						</span>
 					</p>
-					<p class="text-gray-700">
+					<p>
 						Discount Type:
-						<span class="text-lg font-bold text-indigo-900">
-							{{ coupon.discount_type || "N/A" }}</span
+						<span
+							class="text-lg font-bold text-indigo-900 dark:text-indigo-300"
 						>
+							{{ coupon.discount_type || "N/A" }}
+						</span>
 					</p>
 					<p class="mt-1 text-sm">
 						Status:
 						<span
 							:class="
 								coupon.status === 'ACTIVE'
-									? 'text-green-600 font-bold'
-									: 'text-red-500 font-bold'
+									? 'text-green-600 dark:text-green-400 font-bold'
+									: 'text-red-500 dark:text-red-400 font-bold'
 							"
 						>
 							{{ coupon.status }}
@@ -142,34 +146,39 @@ const confirmDeleteCoupon = async () => {
 
 					<!-- Coupon Code -->
 					<div
-						class="mt-4 flex items-center justify-between bg-gray-100 px-4 py-2 rounded-lg border border-dashed border-gray-400"
+						class="mt-4 flex items-center justify-between bg-gray-100 dark:bg-slate-800 px-4 py-2 rounded-lg border border-dashed border-gray-400 dark:border-gray-600"
 					>
-						<span class="font-mono text-lg font-semibold text-gray-800">{{
-							coupon.code
-						}}</span>
+						<span
+							class="font-mono text-lg font-semibold text-gray-800 dark:text-gray-100"
+						>
+							{{ coupon.code }}
+						</span>
 						<Button
 							icon="pi pi-copy"
-							class="!p-2 !bg-indigo-500 !border-none hover:!bg-indigo-600"
+							class="!p-2 !bg-indigo-500 hover:!bg-indigo-600 !border-none"
 							@click="copyCode(coupon.code)"
 						/>
 					</div>
+
+					<!-- Actions -->
 					<div class="mt-4 flex gap-3">
 						<Button
 							label="Edit"
 							icon="pi pi-pencil"
-							class="w-full !bg-primary hover:!bg-secondary !border-none text-white"
+							class="w-full !bg-primary hover:!bg-secondary !border-none !text-white"
 							@click="editCoupon(coupon.id)"
 						/>
 						<Button
 							label="Delete"
 							icon="pi pi-trash"
-							class="w-full !bg-red-500 hover:!bg-red-600 !border-none text-white"
+							class="w-full !bg-red-500 hover:!bg-red-600 !border-none !text-white"
 							@click="deleteCoupon(coupon.id)"
 						/>
 					</div>
 				</div>
 			</div>
 		</div>
+
 		<ConfirmationModal
 			v-model:visible="showDeleteModal"
 			title="Delete Coupon"

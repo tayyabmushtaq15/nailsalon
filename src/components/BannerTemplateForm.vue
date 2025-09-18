@@ -57,12 +57,20 @@ const statusOptions = [
 </script>
 
 <template>
-	<h2 class="text-xl font-semibold mb-4">Banner Template Form</h2>
+	<h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
+		Banner Template Form
+	</h2>
 
-	<div class="p-4 grid gap-4 border border-gray-300 rounded-md">
+	<div
+		class="p-4 grid gap-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 transition-colors duration-300"
+	>
 		<!-- Service Provider ID -->
 		<div>
-			<label for="service_provider_id">Service Provider ID</label>
+			<label
+				for="service_provider_id"
+				class="block mb-1 text-gray-700 dark:text-gray-300"
+				>Service Provider ID</label
+			>
 			<InputText
 				id="service_provider_id"
 				v-model="form.service_provider_id"
@@ -73,7 +81,9 @@ const statusOptions = [
 
 		<!-- Image 1 -->
 		<div>
-			<label for="image1">Image</label>
+			<label for="image1" class="block mb-1 text-gray-700 dark:text-gray-300"
+				>Image</label
+			>
 			<InputText
 				id="image1"
 				v-model="form.image1"
@@ -84,7 +94,9 @@ const statusOptions = [
 
 		<!-- Status -->
 		<div>
-			<label for="status">Status</label>
+			<label for="status" class="block mb-1 text-gray-700 dark:text-gray-300"
+				>Status</label
+			>
 			<Dropdown
 				id="status"
 				v-model="form.status"
@@ -102,7 +114,7 @@ const statusOptions = [
 				:label="ButtonText"
 				icon="pi pi-check"
 				@click="handleSubmit"
-				class="!bg-primary !text-white rounded-md px-4 py-2 ml-auto"
+				class="!bg-primary !text-white rounded-md px-4 py-2 ml-auto hover:opacity-90"
 			/>
 		</div>
 	</div>

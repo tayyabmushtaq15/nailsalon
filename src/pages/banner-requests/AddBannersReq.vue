@@ -1,12 +1,18 @@
 <template>
-	<div class="p-6 bg-gray-50 min-h-screen">
-		<h2 class="text-2xl font-semibold mb-4">Add Banner Request</h2>
+	<div class="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors">
+		<h2 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+			Add Banner Request
+		</h2>
 
-		<div class="bg-white p-6 rounded-lg shadow-md space-y-6">
+		<div
+			class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md space-y-6 transition-colors"
+		>
 			<div class="grid gap-4">
 				<!-- Business Dropdown -->
 				<div>
-					<label>Business</label>
+					<label class="block mb-1 text-gray-700 dark:text-gray-300"
+						>Business</label
+					>
 					<Dropdown
 						v-model="form.business_id"
 						:options="businessOptions"
@@ -19,7 +25,9 @@
 
 				<!-- Template Dropdown -->
 				<div>
-					<label>Template</label>
+					<label class="block mb-1 text-gray-700 dark:text-gray-300"
+						>Template</label
+					>
 					<Dropdown
 						v-model="form.template_id"
 						:options="templateOptions"
@@ -32,13 +40,17 @@
 
 				<!-- Transaction ID -->
 				<div>
-					<label>Transaction ID</label>
+					<label class="block mb-1 text-gray-700 dark:text-gray-300"
+						>Transaction ID</label
+					>
 					<InputText v-model="form.transaction_id" class="w-full" />
 				</div>
 
 				<!-- Status -->
 				<div>
-					<label>Status</label>
+					<label class="block mb-1 text-gray-700 dark:text-gray-300"
+						>Status</label
+					>
 					<Dropdown
 						v-model="form.status"
 						:options="statusOptions"
@@ -57,7 +69,7 @@
 				<Button
 					label="Save"
 					icon="pi pi-check"
-					class="!bg-primary !text-white"
+					class="!bg-primary !text-white dark:!bg-blue-600 dark:hover:!bg-blue-500 transition-colors"
 					@click="handleSubmit"
 				/>
 			</div>
@@ -119,7 +131,6 @@ async function fetchTemplates() {
 		const res = await api.get("/banner-templates/");
 		templateOptions.value =
 			res.data?.map((t, idx) => ({
-				// you can change label here if you want something other than just ID
 				label: `Template ${idx + 1} - ${t.id}`,
 				value: t.id
 			})) || [];

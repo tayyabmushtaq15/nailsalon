@@ -1,7 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
 	darkMode: "class",
-	content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+	content: [
+		"./index.html",
+		"./src/**/*.{vue,js,ts,jsx,tsx}",
+		"./primevue-overrides.css",
+		"./main.css"
+	],
 	theme: {
 		extend: {
 			colors: {

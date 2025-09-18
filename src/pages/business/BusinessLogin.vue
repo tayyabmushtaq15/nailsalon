@@ -1,12 +1,12 @@
 <script setup>
 import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { useBusinessUserStore } from "../../stores/businessUserStore";
 import api from "../../services/api";
 import { InputText } from "primevue";
 import Button from "../../components/Button.vue";
-import { useRoute } from "vue-router";
+
 const route = useRoute();
 const email = ref("");
 const loading = ref(false);
@@ -58,21 +58,31 @@ const submitForm = async () => {
 		class="flex items-center justify-center mt-24"
 	>
 		<div
-			class="bg-white shadow-md w-full max-w-md border border-collapse p-8 rounded-lg"
+			class="bg-white dark:bg-slate-900 shadow-md w-full max-w-md border border-gray-200 dark:border-gray-700 p-8 rounded-lg transition-colors duration-300"
 		>
-			<h1 class="text-2xl font-bold mb-6 text-center">Enter Your Email</h1>
+			<h1
+				class="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100"
+			>
+				Enter Your Email
+			</h1>
 
 			<form @submit.prevent="submitForm" class="space-y-4">
 				<span class="p-float-label w-full">
-					<label for="email">Email</label>
-					<InputText id="email" v-model="email" class="w-full" />
+					<InputText
+						id="email"
+						v-model="email"
+						class="w-full bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
+					/>
+					<label for="email" class="text-gray-600 dark:text-gray-300">
+						Email
+					</label>
 				</span>
 
 				<Button
 					label="Submit"
 					:loading="loading"
 					type="submit"
-					class="w-full !bg-primary hover:*:border-primary hover:!text-white hover:!bg-secondary !text-white !border-white rounded-md px-4 py-2"
+					class="w-full !bg-primary hover:!bg-secondary !text-white !border-transparent rounded-md px-4 py-2"
 				/>
 			</form>
 		</div>

@@ -79,11 +79,14 @@ onMounted(fetchTemplates);
 </script>
 
 <template>
-	<div class="p-6 bg-gray-50 min-h-screen">
+	<div class="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors">
+		<!-- Header -->
 		<div class="flex flex-row justify-between items-center mb-2">
-			<h2 class="text-2xl font-semibold mb-4">Banner Requests</h2>
+			<h2 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+				Banner Requests
+			</h2>
 			<Button
-				class="w-auto rounded-lg p-2 !bg-primary hover:!bg-secondary text-white font-semibold text-md tracking-wide transition duration-300"
+				class="w-auto rounded-lg p-2 !bg-primary hover:!bg-secondary !text-white font-semibold text-md tracking-wide transition duration-300 !border !border-primary hover:!border-secondary dark:!border-white"
 				@click="goToAddBannerReq"
 			>
 				+ Create New Banner Request
@@ -91,7 +94,10 @@ onMounted(fetchTemplates);
 		</div>
 
 		<!-- Loading -->
-		<div v-if="loading" class="text-center py-10 text-gray-500">
+		<div
+			v-if="loading"
+			class="text-center py-10 text-gray-500 dark:text-gray-400"
+		>
 			<i class="pi pi-spin pi-spinner text-3xl mb-2"></i>
 			<p class="text-lg">Loading requests...</p>
 		</div>
@@ -99,7 +105,7 @@ onMounted(fetchTemplates);
 		<!-- Empty -->
 		<div
 			v-else-if="templates.length === 0"
-			class="text-center py-10 text-gray-500"
+			class="text-center py-10 text-gray-500 dark:text-gray-400"
 		>
 			No banner requests found.
 		</div>
@@ -109,22 +115,24 @@ onMounted(fetchTemplates);
 			<div
 				v-for="request in templates"
 				:key="request.id"
-				class="flex flex-col justify-between rounded-2xl shadow-lg border border-gray-200 p-5 bg-gradient-to-br from-white to-gray-50 min-w-[280px] h-full hover:shadow-xl transition duration-300 ease-in-out"
+				class="flex flex-col justify-between rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-5 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 min-w-[280px] h-full hover:shadow-xl transition duration-300 ease-in-out"
 			>
 				<!-- Header -->
-				<div class="border-b pb-3 mb-3">
-					<h3 class="text-lg font-bold text-gray-800 truncate">
+				<div class="border-b border-gray-200 dark:border-gray-700 pb-3 mb-3">
+					<h3
+						class="text-lg font-bold text-gray-800 dark:text-gray-100 truncate"
+					>
 						Business: {{ request.business?.name }}
 					</h3>
-					<p class="text-sm text-gray-500 truncate">
+					<p class="text-sm text-gray-500 dark:text-gray-400 truncate">
 						Request ID: {{ request.id }}
 					</p>
 				</div>
 
 				<!-- Body -->
-				<div class="text-sm text-gray-700 space-y-2 flex-1">
+				<div class="text-sm text-gray-700 dark:text-gray-300 space-y-2 flex-1">
 					<p>
-						<i class="pi pi-user text-gray-400 mr-1"></i>
+						<i class="pi pi-user text-gray-400 dark:text-gray-500 mr-1"></i>
 						<span class="font-semibold">Contact:</span>
 						{{ request.data?.custom_field?.first_name }}
 						{{ request.data?.custom_field?.last_name }} ({{
@@ -132,12 +140,12 @@ onMounted(fetchTemplates);
 						}})
 					</p>
 					<p>
-						<i class="pi pi-calendar text-gray-400 mr-1"></i>
+						<i class="pi pi-calendar text-gray-400 dark:text-gray-500 mr-1"></i>
 						<span class="font-semibold">Created:</span>
 						{{ formatDate(request.created_at) }}
 					</p>
 					<p>
-						<i class="pi pi-image text-gray-400 mr-1"></i>
+						<i class="pi pi-image text-gray-400 dark:text-gray-500 mr-1"></i>
 						<span class="font-semibold">Template ID:</span>
 						{{ request.banner_template?.id }}
 					</p>
@@ -159,17 +167,19 @@ onMounted(fetchTemplates);
 				</div>
 
 				<!-- Actions -->
-				<div class="flex gap-2 mt-5 justify-end border-t pt-3">
+				<div
+					class="flex gap-2 mt-5 justify-end border-t border-gray-200 dark:border-gray-700 pt-3"
+				>
 					<Button
 						label="Edit"
 						icon="pi pi-pencil"
-						class="px-3 py-1 rounded-lg !bg-primary !text-white transition hover:!bg-secondary"
+						class="px-3 py-1 rounded-lg !bg-primary !text-white transition hover:!bg-secondary !border !border-primary hover:!border-secondary dark:!border-white"
 						@click="editTemplate(request)"
 					/>
 					<Button
 						label="Delete"
 						icon="pi pi-trash"
-						class="px-3 py-1 rounded-lg !bg-red-500 !text-white hover:!bg-red-600 transition"
+						class="px-3 py-1 rounded-lg !bg-red-500 !text-white hover:!bg-red-600 transition !border !border-primary hover:!border-secondary dark:!border-white"
 						@click="openDeleteModal(request)"
 					/>
 				</div>

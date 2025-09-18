@@ -5,18 +5,9 @@ import Button from "primevue/button";
 import Dropdown from "primevue/dropdown";
 
 const props = defineProps({
-	initialData: {
-		type: Object,
-		default: () => ({})
-	},
-	isBackButton: {
-		type: Boolean,
-		default: true
-	},
-	ButtonText: {
-		type: String,
-		default: "Next"
-	}
+	initialData: { type: Object, default: () => ({}) },
+	isBackButton: { type: Boolean, default: true },
+	ButtonText: { type: String, default: "Next" }
 });
 
 const emit = defineEmits(["submit", "back"]);
@@ -57,13 +48,21 @@ const statusOptions = [
 </script>
 
 <template>
-	<h2 class="text-xl font-semibold mb-4">Service Provider Form</h2>
+	<h2
+		class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100 dark:bg-slate-900"
+	>
+		Service Provider Form
+	</h2>
 
-	<div class="p-2 grid gap-4 border border-1 border-gray-300 rounded-md">
+	<div
+		class="p-4 grid gap-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900"
+	>
 		<!-- Name + Contact -->
 		<div class="col-12 flex flex-wrap gap-4">
 			<div class="flex-1 min-w-[200px]">
-				<label for="name">Name</label>
+				<label for="name" class="block mb-1 text-gray-700 dark:text-gray-300"
+					>Name</label
+				>
 				<InputText
 					id="name"
 					v-model="form.name"
@@ -73,7 +72,11 @@ const statusOptions = [
 			</div>
 
 			<div class="flex-1 min-w-[200px]">
-				<label for="contact_no">Contact No</label>
+				<label
+					for="contact_no"
+					class="block mb-1 text-gray-700 dark:text-gray-300"
+					>Contact No</label
+				>
 				<InputText
 					id="contact_no"
 					v-model="form.contact_no"
@@ -86,7 +89,9 @@ const statusOptions = [
 		<!-- Email + Address -->
 		<div class="col-12 flex flex-wrap gap-4">
 			<div class="flex-1 min-w-[200px]">
-				<label for="email">Email</label>
+				<label for="email" class="block mb-1 text-gray-700 dark:text-gray-300"
+					>Email</label
+				>
 				<InputText
 					id="email"
 					v-model="form.email"
@@ -97,7 +102,9 @@ const statusOptions = [
 			</div>
 
 			<div class="flex-1 min-w-[200px]">
-				<label for="address">Address</label>
+				<label for="address" class="block mb-1 text-gray-700 dark:text-gray-300"
+					>Address</label
+				>
 				<InputText
 					id="address"
 					v-model="form.address"
@@ -110,7 +117,9 @@ const statusOptions = [
 		<!-- Status -->
 		<div class="col-12 flex flex-wrap gap-4">
 			<div class="flex-1 min-w-[200px]">
-				<label for="status">Status</label>
+				<label for="status" class="block mb-1 text-gray-700 dark:text-gray-300"
+					>Status</label
+				>
 				<Dropdown
 					id="status"
 					v-model="form.status"
@@ -129,7 +138,7 @@ const statusOptions = [
 				:label="ButtonText"
 				icon="pi pi-check"
 				@click="handleSubmit"
-				class="w-full md:w-auto !bg-primary !text-white !border-white rounded-md px-4 py-2"
+				class="w-full md:w-auto rounded-md px-4 py-2 !bg-primary !text-white !border-transparent hover:opacity-90"
 			/>
 		</div>
 	</div>

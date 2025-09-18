@@ -1,11 +1,15 @@
 <template>
 	<div
-		class="min-h-screen flex items-center justify-center relative overflow-hidden"
+		class="min-h-screen flex items-center justify-center relative overflow-hidden bg-lightbg dark:bg-darkbg text-black dark:text-white transition-colors"
 	>
-		<div class="absolute inset-0 bg-white/40 backdrop-blur-sm"></div>
-
+		<!-- Background blur layer -->
 		<div
-			class="relative w-full max-w-sm p-8 bg-white rounded-xl shadow-sm border border-gray-300"
+			class="absolute inset-0 bg-white/40 dark:bg-black/40 backdrop-blur-sm"
+		></div>
+
+		<!-- Card -->
+		<div
+			class="relative w-full max-w-sm p-8 rounded-xl shadow-sm border bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 transition-colors"
 		>
 			<div class="text-center mb-6">
 				<img
@@ -13,8 +17,12 @@
 					alt="Caremetrix"
 					class="mx-auto w-12 h-12 mb-3"
 				/>
-				<h1 class="text-3xl font-medium text-primary">Nail Salon</h1>
-				<p class="text-gray-600 mt-1">Sign in to your account</p>
+				<h1 class="text-3xl font-medium text-primary dark:text-white">
+					Nail Salon
+				</h1>
+				<p class="text-gray-600 dark:text-gray-400 mt-1">
+					Sign in to your account
+				</p>
 			</div>
 
 			<form @submit.prevent="submitForm" class="space-y-4">
@@ -23,7 +31,7 @@
 						v-model="email"
 						type="email"
 						placeholder="Email"
-						class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+						class="w-full px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
 					/>
 					<p v-if="errors.email" class="text-red-500 text-sm mt-1">
 						{{ errors.email }}
@@ -35,7 +43,7 @@
 						v-model="password"
 						type="password"
 						placeholder="Password"
-						class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+						class="w-full px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
 					/>
 					<p v-if="errors.password" class="text-red-500 text-sm mt-1">
 						{{ errors.password }}
@@ -44,7 +52,7 @@
 
 				<button
 					type="submit"
-					class="w-full bg-primary text-white py-2 rounded-md hover:bg-secondary transition"
+					class="w-full py-2 rounded-md transition bg-primary text-white hover:bg-secondary dark:bg-blue-600 dark:hover:bg-blue-500"
 				>
 					Sign in
 				</button>
@@ -53,13 +61,15 @@
 			<div class="flex justify-end mt-4 text-sm">
 				<router-link
 					to="/forgot-password"
-					class="text-blue-600 hover:underline"
+					class="text-blue-600 dark:text-blue-400 hover:underline"
 				>
 					Forgot password?
 				</router-link>
 			</div>
 
-			<div class="mt-12 text-xs text-center text-gray-500 space-x-2">
+			<div
+				class="mt-12 text-xs text-center text-gray-500 dark:text-gray-400 space-x-2"
+			>
 				<router-link to="/terms" class="hover:underline"
 					>Terms of Use</router-link
 				>
