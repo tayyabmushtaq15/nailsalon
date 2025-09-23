@@ -18,7 +18,7 @@ async function handleSubmit(payload) {
 			life: 4000
 		});
 
-		router.push("/banners"); // ✅ redirect after success
+		router.push("/banners");
 	} catch (error) {
 		toast.add({
 			severity: "error",

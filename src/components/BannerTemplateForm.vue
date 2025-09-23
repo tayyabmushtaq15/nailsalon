@@ -1,8 +1,9 @@
 <script setup>
-import { reactive, watch } from "vue";
+import { reactive, watch, ref } from "vue";
 import InputText from "primevue/inputtext";
 import Dropdown from "primevue/dropdown";
 import Button from "primevue/button";
+import UploadImageModal from "./UploadImageModal.vue"; // import modal
 
 const props = defineProps({
 	initialData: {
@@ -27,6 +28,8 @@ const form = reactive({
 	status: "active"
 });
 
+const uploadModalRef = ref(null);
+
 watch(
 	() => props.initialData,
 	(newVal) => {
@@ -48,6 +51,15 @@ function handleSubmit() {
 		status: form.status
 	};
 	emit("submit", payload);
+}
+
+function openUploadModal() {
+	uploadModalRef.value?.open();
+}
+
+function handleImageUploaded({ objectKey }) {
+	// Update form with uploaded image path (from S3 or wherever)
+	form.image1 = objectKey;
 }
 
 const statusOptions = [
@@ -84,12 +96,17 @@ const statusOptions = [
 			<label for="image1" class="block mb-1 text-gray-700 dark:text-gray-300"
 				>Image</label
 			>
-			<InputText
-				id="image1"
-				v-model="form.image1"
-				placeholder="Enter image URL or path"
-				class="w-full"
-			/>
+			<div class="flex gap-2">
+				<Button
+					label="Upload"
+					icon="pi pi-upload"
+					@click="openUploadModal"
+					class="!bg-primary !text-white px-3"
+				/>
+				<p v-if="form.image1" class="mt-2 text-sm text-green-600">
+					Image uploaded: {{ form.image1 }}
+				</p>
+			</div>
 		</div>
 
 		<!-- Status -->
@@ -118,4 +135,7 @@ const statusOptions = [
 			/>
 		</div>
 	</div>
+
+	<!-- Upload Modal -->
+	<UploadImageModal ref="uploadModalRef" @uploaded="handleImageUploaded" />
 </template>

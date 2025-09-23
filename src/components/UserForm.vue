@@ -1,9 +1,10 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import InputText from "primevue/inputtext";
 import Dropdown from "primevue/dropdown";
 import Button from "primevue/button";
 import { computed } from "vue";
+import UploadImageModal from "./UploadImageModal.vue";
 
 const props = defineProps({
 	title: {
@@ -36,7 +37,7 @@ const form = reactive({
 	country_code: props.initialData.country_code || "",
 	phone: props.initialData.phone || "",
 	status:
-		props.initialData.status?.toLowerCase() === "active"
+		props.initialData.status === "active"
 			? "active"
 			: props.initialData.status?.toLowerCase() === "inactive"
 				? "inactive"
@@ -50,14 +51,21 @@ const roleOptions = [
 	{ label: "Manager", value: "manager" }
 ];
 const statusOptions = [
-	{ label: "Active", value: "active" },
+	{ label: "Active", value: "ACTIVE" },
 	{ label: "Inactive", value: "inactive" }
 ];
-
+const uploadModal = ref(null);
 const isInactive = computed(() => form.status === "inactive");
 
 function handleSubmit() {
 	emit("submit", { ...form });
+}
+function handleImageUploaded({ objectKey }) {
+	form.image = objectKey; // store the uploaded S3 key
+}
+
+function openUploadModal() {
+	uploadModal.value?.open(); // ✅ call exposed method correctly
 }
 </script>
 
@@ -179,7 +187,17 @@ function handleSubmit() {
 				/>
 			</div>
 		</div>
-
+		<div class="col-12">
+			<Button
+				label="Upload Image"
+				icon="pi pi-upload"
+				class="!bg-blue-500 !text-white"
+				@click="openUploadModal"
+			/>
+			<p v-if="form.image" class="mt-2 text-sm text-green-600">
+				Image uploaded: {{ form.image }}
+			</p>
+		</div>
 		<!-- Status -->
 		<div class="col-12">
 			<label for="status" class="block mb-1 !text-gray-700 dark:!text-gray-300"
@@ -227,4 +245,5 @@ function handleSubmit() {
 			/>
 		</div>
 	</div>
+	<UploadImageModal ref="uploadModal" @uploaded="handleImageUploaded" />
 </template>

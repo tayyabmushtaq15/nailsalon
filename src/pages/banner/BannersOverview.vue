@@ -52,7 +52,19 @@
 						{{ template.id }}
 					</p>
 				</div>
-
+				<div class="mb-3 flex flex-col items-center">
+					<img
+						:src="getImage(template.images?.image1)"
+						alt="Banner Thumbnail"
+						class="w-20 h-20 object-cover rounded-md border border-gray-200 dark:border-gray-700 shadow-sm"
+						@error="onImageError($event)"
+					/>
+					<p
+						class="mt-2 text-xs text-gray-500 dark:text-gray-400 truncate max-w-[120px]"
+					>
+						{{ getImageName(template.images?.image1) }}
+					</p>
+				</div>
 				<!-- Body -->
 				<div class="text-sm text-gray-700 dark:text-gray-300 space-y-2 flex-1">
 					<p>
@@ -184,6 +196,34 @@ const fetchTemplates = async () => {
 };
 
 const formatDate = (d) => (d ? new Date(d).toLocaleString() : "-");
+const placeholderImage = "https://via.placeholder.com/80x80?text=No+Img";
+
+const getImage = (url) => {
+	if (!url || !url.startsWith("http")) {
+		return placeholderImage;
+	}
+	return url;
+};
+
+const getImageName = (url) => {
+	if (!url) return "No image";
+
+	try {
+		const parts = url.split("/");
+		let fileName = parts[parts.length - 1];
+
+		fileName = fileName.split("__")[0];
+		fileName = fileName.replace(/_[0-9a-f-]{8,}$/i, "");
+
+		return fileName;
+	} catch {
+		return "Unknown";
+	}
+};
+
+const onImageError = (e) => {
+	e.target.src = placeholderImage;
+};
 
 onMounted(fetchTemplates);
 </script>
