@@ -12,6 +12,7 @@
 		<UserProfileMenu
 			:name="user?.first_name + ' ' + user?.last_name"
 			:email="user?.email"
+			:image="user?.image"
 			@logout="logout"
 		/>
 	</div>
