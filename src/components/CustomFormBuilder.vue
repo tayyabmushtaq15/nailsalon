@@ -16,9 +16,7 @@ const fieldTypes = [
 	{ label: "Text", value: "string" },
 	{ label: "Number", value: "number" },
 	{ label: "Boolean", value: "boolean" },
-	{ label: "Date", value: "date" },
-	{ label: "Email", value: "email" },
-	{ label: "Phone", value: "phone" }
+	{ label: "Email", value: "email" }
 ];
 
 function addField() {
