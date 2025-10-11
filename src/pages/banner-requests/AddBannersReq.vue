@@ -35,6 +35,7 @@
 						optionValue="value"
 						placeholder="Select Template"
 						class="w-full"
+						@change="handleTemplateSelect"
 					/>
 				</div>
 
@@ -61,8 +62,12 @@
 				</div>
 			</div>
 
-			<!-- Custom Form Builder -->
-			<CustomFormBuilder />
+			<!-- Dynamic Custom Fields -->
+			<DynamicCustomForm
+				v-if="Object.keys(customFields).length"
+				v-model="customFormData"
+				:customFields="customFields"
+			/>
 
 			<!-- Submit -->
 			<div class="flex justify-end">
@@ -82,15 +87,13 @@ import { reactive, ref, onMounted } from "vue";
 import InputText from "primevue/inputtext";
 import Dropdown from "primevue/dropdown";
 import Button from "primevue/button";
-import CustomFormBuilder from "../../components/CustomFormBuilder.vue";
-import { useCustomFieldsStore } from "../../stores/formBuilderStore";
+import DynamicCustomForm from "../../components/DynamicCustomForm.vue";
 import { api } from "../../services/api";
 import { useToast } from "primevue/usetoast";
 import { useRouter } from "vue-router";
 
 const toast = useToast();
 const router = useRouter();
-const customFieldsStore = useCustomFieldsStore();
 
 const form = reactive({
 	business_id: "",
@@ -101,6 +104,8 @@ const form = reactive({
 
 const businessOptions = ref([]);
 const templateOptions = ref([]);
+const customFields = ref({});
+const customFormData = ref({});
 
 const statusOptions = [
 	{ label: "PENDING", value: "PENDING" },
@@ -113,6 +118,7 @@ const statusOptions = [
 	{ label: "Banner", value: "Banner" }
 ];
 
+// Fetch business list
 async function fetchBusinesses() {
 	try {
 		const res = await api.get("/businesses");
@@ -126,16 +132,36 @@ async function fetchBusinesses() {
 	}
 }
 
+// Fetch templates list
 async function fetchTemplates() {
 	try {
 		const res = await api.get("/banner-templates/");
 		templateOptions.value =
 			res.data?.map((t, idx) => ({
-				label: `Template ${idx + 1} - ${t.id}`,
-				value: t.id
+				label: `Template ${idx + 1} - ${t.banner_id}`,
+				value: t.banner_id
 			})) || [];
 	} catch (err) {
 		console.error("Failed to fetch templates", err);
+	}
+}
+
+// Fetch custom fields for selected template
+async function handleTemplateSelect() {
+	if (!form.template_id) return;
+	try {
+		const res = await api.get(`/banner-templates/${form.template_id}`);
+		const data = res.data?.[0];
+		customFields.value = data?.banner_custom_field?.custom_field || {};
+		customFormData.value = {}; // reset fields
+	} catch (err) {
+		console.error("Failed to fetch custom fields", err);
+		toast.add({
+			severity: "error",
+			summary: "Error",
+			detail: "Failed to load template fields",
+			life: 3000
+		});
 	}
 }
 
@@ -144,13 +170,14 @@ onMounted(() => {
 	fetchTemplates();
 });
 
+// Submit handler
 async function handleSubmit() {
 	const payload = {
 		business_id: form.business_id,
 		template_id: form.template_id,
 		transaction_id: form.transaction_id,
 		data: {
-			custom_field: customFieldsStore.fields
+			custom_field: customFormData.value
 		},
 		status: form.status.toUpperCase()
 	};

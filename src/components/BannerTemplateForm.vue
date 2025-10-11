@@ -73,12 +73,10 @@ watch(
 	{ immediate: true, deep: true }
 );
 console.log(props.initialData.images);
-// ✅ Open upload modal
 function openUploadModal() {
 	uploadModalRef.value?.open();
 }
 
-// ✅ Handle uploaded image
 function handleImageUploaded({ objectKey }) {
 	const urlKey =
 		currentImageIndex.value === 1
@@ -88,7 +86,6 @@ function handleImageUploaded({ objectKey }) {
 	currentImageIndex.value++;
 }
 
-// ✅ Submit payload
 function handleSubmit() {
 	const payload = {
 		service_provider_id: form.service_provider_id,
@@ -115,7 +112,6 @@ const statusOptions = [
 	<div
 		class="p-4 grid gap-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 transition-colors duration-300"
 	>
-		<!-- ✅ Service Provider Dropdown -->
 		<div>
 			<label
 				for="service_provider_id"
@@ -137,7 +133,6 @@ const statusOptions = [
 			/>
 		</div>
 
-		<!-- ✅ Multiple Image Uploads under one object -->
 		<div>
 			<div class="flex justify-between items-center">
 				<label class="text-gray-700 dark:text-gray-300">Images</label>
@@ -165,7 +160,6 @@ const statusOptions = [
 			</div>
 		</div>
 
-		<!-- ✅ Status -->
 		<div>
 			<label for="status" class="block mb-1 text-gray-700 dark:text-gray-300"
 				>Status</label
@@ -181,12 +175,10 @@ const statusOptions = [
 			/>
 		</div>
 
-		<!-- ✅ Custom Fields -->
 		<div>
 			<CustomFormBuilder />
 		</div>
 
-		<!-- ✅ Buttons -->
 		<div class="flex justify-between mt-4">
 			<Button
 				:label="ButtonText"
@@ -197,6 +189,5 @@ const statusOptions = [
 		</div>
 	</div>
 
-	<!-- ✅ Upload Modal -->
 	<UploadImageModal ref="uploadModalRef" @uploaded="handleImageUploaded" />
 </template>
