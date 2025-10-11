@@ -13,12 +13,37 @@ const initialData = ref(null);
 const loading = ref(true);
 const id = route.params.id; // ✅ get id from URL
 
-// Fetch existing banner template by ID
 const fetchTemplate = async () => {
 	try {
 		const res = await api.get(`/banner-templates/${id}`);
-		initialData.value = res?.data || res; // depending on API response structure
+		console.log("Fetched banner template:", res.data[0]);
+
+		if (res?.data && Array.isArray(res.data) && res.data.length) {
+			const banner = res.data[0]; // ✅ correct path
+
+			const images =
+				banner.images?.image1 && typeof banner.images.image1 === "object"
+					? banner.images.image1
+					: {};
+
+			const customFields =
+				banner.banner_custom_field?.custom_field &&
+				typeof banner.banner_custom_field.custom_field === "object"
+					? banner.banner_custom_field.custom_field
+					: {};
+
+			// ✅ Combine everything for your form
+			initialData.value = {
+				service_provider_id: banner.service_provider_id,
+				status: banner.status,
+				images: banner.images?.image1 || {},
+				banner_custom_field: banner.banner_custom_field || {}
+			};
+		} else {
+			throw new Error("No banner template found");
+		}
 	} catch (err) {
+		console.error("Error fetching banner template:", err);
 		toast.add({
 			severity: "error",
 			summary: "Error",
@@ -30,6 +55,7 @@ const fetchTemplate = async () => {
 	}
 };
 
+// ✅ Lifecycle: Fetch data when mounted
 onMounted(fetchTemplate);
 
 // ✅ Handle form submission (PUT)
@@ -56,6 +82,7 @@ const handleSubmit = async (payload) => {
 	}
 };
 
+// ✅ Back button handler
 const handleBack = () => {
 	router.back();
 };
