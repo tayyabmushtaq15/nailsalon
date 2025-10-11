@@ -1,9 +1,11 @@
 <script setup>
-import { reactive, watch, ref } from "vue";
-import InputText from "primevue/inputtext";
+import { reactive, watch, ref, onMounted } from "vue";
 import Dropdown from "primevue/dropdown";
 import Button from "primevue/button";
-import UploadImageModal from "./UploadImageModal.vue"; // import modal
+import UploadImageModal from "./UploadImageModal.vue";
+import CustomFormBuilder from "./CustomFormBuilder.vue";
+import { useCustomFieldsStore } from "../stores/formBuilderStore";
+import api from "../services/api"; // axios instance
 
 const props = defineProps({
 	initialData: {
@@ -22,44 +24,81 @@ const props = defineProps({
 
 const emit = defineEmits(["submit", "back"]);
 
+const store = useCustomFieldsStore();
+const uploadModalRef = ref(null);
+
 const form = reactive({
 	service_provider_id: "",
-	image1: "",
+	images: { image1: {} }, // single key object with multiple URLs
 	status: "active"
 });
 
-const uploadModalRef = ref(null);
+const printingProviders = ref([]);
+const loadingProviders = ref(false);
+const currentImageIndex = ref(1);
 
+// ✅ Fetch printing service providers
+async function fetchPrintingProviders() {
+	try {
+		loadingProviders.value = true;
+		const { data } = await api.get("printing-service-providers/");
+		if (data?.status && Array.isArray(data.data)) {
+			printingProviders.value = data.data.map((p) => ({
+				label: `${p.name} (${p.email})`,
+				value: p.id
+			}));
+		}
+	} catch (error) {
+		console.error("Error fetching providers:", error);
+	} finally {
+		loadingProviders.value = false;
+	}
+}
+
+onMounted(fetchPrintingProviders);
+
+// ✅ Prefill data when editing
 watch(
 	() => props.initialData,
 	(newVal) => {
 		if (newVal) {
 			Object.assign(form, {
 				service_provider_id: newVal.service_provider_id || "",
-				image1: newVal.images?.image1 || "",
+				images: newVal.images || { image1: {} },
 				status: newVal.status?.toLowerCase() || "active"
 			});
+			store.setFields(newVal.banner_custom_field?.custom_field || {});
 		}
 	},
 	{ immediate: true, deep: true }
 );
-
-function handleSubmit() {
-	const payload = {
-		service_provider_id: form.service_provider_id,
-		images: { image1: form.image1 },
-		status: form.status
-	};
-	emit("submit", payload);
-}
-
+console.log(props.initialData.images);
+// ✅ Open upload modal
 function openUploadModal() {
 	uploadModalRef.value?.open();
 }
 
+// ✅ Handle uploaded image
 function handleImageUploaded({ objectKey }) {
-	// Update form with uploaded image path (from S3 or wherever)
-	form.image1 = objectKey;
+	const urlKey =
+		currentImageIndex.value === 1
+			? "Image"
+			: `Image_${currentImageIndex.value}`;
+	form.images.image1[urlKey] = objectKey;
+	currentImageIndex.value++;
+}
+
+// ✅ Submit payload
+function handleSubmit() {
+	const payload = {
+		service_provider_id: form.service_provider_id,
+		images: form.images,
+		status: form.status,
+		banner_custom_field: {
+			custom_field: store.fields
+		}
+	};
+	emit("submit", payload);
 }
 
 const statusOptions = [
@@ -76,40 +115,57 @@ const statusOptions = [
 	<div
 		class="p-4 grid gap-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 transition-colors duration-300"
 	>
-		<!-- Service Provider ID -->
+		<!-- ✅ Service Provider Dropdown -->
 		<div>
 			<label
 				for="service_provider_id"
 				class="block mb-1 text-gray-700 dark:text-gray-300"
-				>Service Provider ID</label
 			>
-			<InputText
+				Select Printing Service Provider
+			</label>
+
+			<Dropdown
 				id="service_provider_id"
 				v-model="form.service_provider_id"
-				placeholder="Enter provider ID"
+				:options="printingProviders"
+				optionLabel="label"
+				optionValue="value"
+				:loading="loadingProviders"
+				placeholder="Select a service provider"
 				class="w-full"
+				:disabled="loadingProviders"
 			/>
 		</div>
 
-		<!-- Image 1 -->
+		<!-- ✅ Multiple Image Uploads under one object -->
 		<div>
-			<label for="image1" class="block mb-1 text-gray-700 dark:text-gray-300"
-				>Image</label
-			>
-			<div class="flex gap-2">
+			<div class="flex justify-between items-center">
+				<label class="text-gray-700 dark:text-gray-300">Images</label>
 				<Button
-					label="Upload"
 					icon="pi pi-upload"
-					@click="openUploadModal"
+					label="Upload New Image"
 					class="!bg-primary !text-white px-3"
+					@click="openUploadModal"
 				/>
-				<p v-if="form.image1" class="mt-2 text-sm text-green-600">
-					Image uploaded: {{ form.image1 }}
-				</p>
+			</div>
+
+			<div
+				v-if="form.images?.image1 && Object.keys(form.images.image1).length"
+				class="mt-3 space-y-2"
+			>
+				<div
+					v-for="(url, key) in form.images.image1"
+					:key="key"
+					class="flex items-center gap-2 border p-2 rounded-md"
+				>
+					<p class="text-sm text-gray-700 dark:text-gray-300">
+						{{ key }}: <span class="text-green-600">{{ url }}</span>
+					</p>
+				</div>
 			</div>
 		</div>
 
-		<!-- Status -->
+		<!-- ✅ Status -->
 		<div>
 			<label for="status" class="block mb-1 text-gray-700 dark:text-gray-300"
 				>Status</label
@@ -125,7 +181,12 @@ const statusOptions = [
 			/>
 		</div>
 
-		<!-- Buttons -->
+		<!-- ✅ Custom Fields -->
+		<div>
+			<CustomFormBuilder />
+		</div>
+
+		<!-- ✅ Buttons -->
 		<div class="flex justify-between mt-4">
 			<Button
 				:label="ButtonText"
@@ -136,6 +197,6 @@ const statusOptions = [
 		</div>
 	</div>
 
-	<!-- Upload Modal -->
+	<!-- ✅ Upload Modal -->
 	<UploadImageModal ref="uploadModalRef" @uploaded="handleImageUploaded" />
 </template>

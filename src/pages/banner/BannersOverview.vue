@@ -32,13 +32,10 @@
 		</div>
 
 		<!-- Grid -->
-		<div
-			v-if="templates.length"
-			class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-		>
+		<div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 			<div
 				v-for="template in templates"
-				:key="template.id"
+				:key="template.banner_id"
 				class="flex flex-col justify-between rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-5 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 min-w-[280px] h-full hover:shadow-xl transition duration-300 ease-in-out"
 			>
 				<!-- Header -->
@@ -46,43 +43,64 @@
 					<h3
 						class="text-lg font-bold text-gray-800 dark:text-gray-100 truncate"
 					>
-						Template ID
+						Banner ID
 					</h3>
 					<p class="text-sm text-gray-500 dark:text-gray-400 truncate">
-						{{ template.id }}
+						{{ template.banner_id }}
 					</p>
 				</div>
+
+				<!-- Multiple Images Preview -->
 				<div class="mb-3 flex flex-col items-center">
-					<img
-						:src="getImage(template.images?.image1)"
-						alt="Banner Thumbnail"
-						class="w-20 h-20 object-cover rounded-md border border-gray-200 dark:border-gray-700 shadow-sm"
-						@error="onImageError($event)"
-					/>
-					<p
-						class="mt-2 text-xs text-gray-500 dark:text-gray-400 truncate max-w-[120px]"
+					<div
+						class="flex gap-2 overflow-x-auto max-w-full py-2 px-1 scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600"
 					>
-						{{ getImageName(template.images?.image1) }}
-					</p>
+						<div
+							v-for="(img, index) in extractImages(template.images)"
+							:key="index"
+							class="flex flex-col items-center min-w-[80px]"
+						>
+							<img
+								:src="getImage(img)"
+								alt="Banner Thumbnail"
+								class="w-20 h-20 object-cover rounded-md border border-gray-200 dark:border-gray-700 shadow-sm cursor-pointer hover:opacity-80 transition"
+								@click="openImagePreview(template, index)"
+								@error="onImageError($event)"
+							/>
+							<p
+								class="mt-1 text-xs text-gray-500 dark:text-gray-400 truncate max-w-[80px]"
+							>
+								{{ getImageName(img) }}
+							</p>
+						</div>
+					</div>
 				</div>
+
 				<!-- Body -->
 				<div class="text-sm text-gray-700 dark:text-gray-300 space-y-2 flex-1">
 					<p>
 						<i class="pi pi-user text-gray-400 dark:text-gray-500 mr-1"></i>
 						<span class="font-semibold">Service Provider:</span>
-						{{ template.service_provider_id }}
+						{{ template.service_provider_info?.name || "-" }}
 					</p>
 					<p>
-						<i class="pi pi-calendar text-gray-400 dark:text-gray-500 mr-1"></i>
-						<span class="font-semibold">Created:</span>
-						{{ formatDate(template.created_at) }}
+						<i class="pi pi-envelope text-gray-400 dark:text-gray-500 mr-1"></i>
+						<span class="font-semibold">Email:</span>
+						{{ template.service_provider_info?.email || "-" }}
+					</p>
+					<p>
+						<i
+							class="pi pi-map-marker text-gray-400 dark:text-gray-500 mr-1"
+						></i>
+						<span class="font-semibold">Address:</span>
+						{{ template.service_provider_info?.address || "-" }}
 					</p>
 				</div>
 
 				<!-- Status -->
 				<div class="mt-4 flex items-center justify-between">
 					<Tag
-						:value="template.status"
+						:value="template.status ? template.status : 'INACTIVE'"
 						:severity="
 							template.status?.toLowerCase() === 'active' ? 'success' : 'danger'
 						"
@@ -119,8 +137,68 @@
 			@confirm="confirmDelete"
 			@cancel="cancelDelete"
 		/>
+
+		<!-- 🖼 Image Preview Modal (Improved Carousel Style) -->
+		<div
+			v-if="showImageModal"
+			class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
+			@click.self="closeImagePreview"
+		>
+			<!-- Modal Container -->
+			<div
+				class="relative w-full max-w-5xl min-w-[320px] max-h-[90vh] bg-gray-900 rounded-2xl shadow-2xl flex flex-col items-center overflow-hidden"
+			>
+				<button
+					class="absolute top-4 right-4 z-50 text-white text-2xl hover:text-gray-300 transition"
+					type="button"
+					@click.stop="closeImagePreview"
+				>
+					<i class="pi pi-times"></i>
+				</button>
+
+				<!-- 🔄 Carousel Wrapper -->
+				<div
+					class="relative flex items-center justify-center w-full h-full p-6 box-border"
+					style="min-height: 400px"
+				>
+					<!-- ⬅ Prev Button (relative to modal) -->
+					<button
+						v-if="imageList.length > 1"
+						@click.stop="prevImage"
+						class="absolute left-6 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black text-white p-4 rounded-full shadow-lg transition"
+					>
+						<i class="pi pi-chevron-left text-xl"></i>
+					</button>
+
+					<!-- 🖼 Image -->
+					<img
+						:src="currentImage"
+						alt="Full Preview"
+						class="max-h-[80vh] max-w-[90%] object-contain rounded-xl transition-all duration-300"
+						@error="onImageError($event)"
+					/>
+
+					<!-- ➡ Next Button (relative to modal) -->
+					<button
+						v-if="imageList.length > 1"
+						@click.stop="nextImage"
+						class="absolute right-6 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black text-white p-4 rounded-full shadow-lg transition"
+					>
+						<i class="pi pi-chevron-right text-xl"></i>
+					</button>
+				</div>
+
+				<!-- 🔢 Counter -->
+				<div
+					class="text-white text-sm py-4 bg-gray-800 w-full text-center border-t border-gray-700"
+				>
+					{{ currentIndex + 1 }} / {{ imageList.length }}
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
+
 <script setup>
 import { ref, onMounted } from "vue";
 import { api } from "../../services/api";
@@ -128,6 +206,7 @@ import { Button } from "primevue";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import ConfirmationModal from "../../components/ConfirmationModal.vue";
+import { computed } from "vue";
 
 const templates = ref([]);
 const loading = ref(true);
@@ -137,12 +216,18 @@ const toast = useToast();
 const showDeleteModal = ref(false);
 const selectedTemplate = ref(null);
 
+// 🖼 image preview modal (carousel)
+const showImageModal = ref(false);
+const imageList = ref([]);
+const currentIndex = ref(0);
+const currentImage = computed(() => imageList.value[currentIndex.value]);
+
 const goToAddBanners = () => {
 	router.push("/banners/add-banner-template");
 };
 
 const editTemplate = (template) => {
-	router.push(`/banners/edit-banner-template/${template.id}`);
+	router.push(`/banners/edit-banner-template/${template.banner_id}`);
 };
 
 const openDeleteModal = (template) => {
@@ -156,15 +241,11 @@ const cancelDelete = () => {
 
 const confirmDelete = async () => {
 	if (!selectedTemplate.value) return;
-
 	try {
-		await api.delete(`/banner-templates/${selectedTemplate.value.id}`);
-
-		// remove from local list
+		await api.delete(`/banner-templates/${selectedTemplate.value.banner_id}`);
 		templates.value = templates.value.filter(
-			(t) => t.id !== selectedTemplate.value.id
+			(t) => t.banner_id !== selectedTemplate.value.banner_id
 		);
-
 		toast.add({
 			severity: "success",
 			summary: "Deleted",
@@ -195,35 +276,137 @@ const fetchTemplates = async () => {
 	}
 };
 
-const formatDate = (d) => (d ? new Date(d).toLocaleString() : "-");
-const placeholderImage = "https://via.placeholder.com/80x80?text=No+Img";
+const placeholderImage =
+	"https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
 
-const getImage = (url) => {
-	if (!url || !url.startsWith("http")) {
-		return placeholderImage;
-	}
-	return url;
+// ✅ Extract multiple images
+// ✅ Extract multiple images (supports nested structures)
+const extractImages = (imagesObj) => {
+	if (!imagesObj || typeof imagesObj !== "object") return [];
+
+	const allImages = [];
+
+	const traverse = (obj) => {
+		for (const key in obj) {
+			const val = obj[key];
+			if (!val) continue;
+
+			if (typeof val === "string") {
+				allImages.push(val);
+			} else if (typeof val === "object") {
+				traverse(val); // recursive call for nested image sets
+			}
+		}
+	};
+
+	traverse(imagesObj);
+	return allImages;
 };
 
-const getImageName = (url) => {
-	if (!url) return "No image";
+// ✅ Build full URL if needed
+const getImage = (imageData) => {
+	if (!imageData) return placeholderImage;
 
-	try {
-		const parts = url.split("/");
-		let fileName = parts[parts.length - 1];
-
-		fileName = fileName.split("__")[0];
-		fileName = fileName.replace(/_[0-9a-f-]{8,}$/i, "");
-
-		return fileName;
-	} catch {
-		return "Unknown";
+	if (typeof imageData === "string") {
+		return imageData.startsWith("http")
+			? imageData
+			: `https://test-bucket-api.nailsalon.club/nailsaloon/${imageData}`;
 	}
+
+	if (typeof imageData === "object") {
+		const possibleKeys = ["url", "url_2", "Image"];
+		for (const key of possibleKeys) {
+			if (imageData[key]) {
+				const val = imageData[key];
+				return val.startsWith("http")
+					? val
+					: `https://test-bucket-api.nailsalon.club/nailsaloon/${val}`;
+			}
+		}
+	}
+
+	return placeholderImage;
 };
 
+// ✅ Extract image name
+const getImageName = (imageData) => {
+	if (!imageData) return "No image";
+	let fileName = "";
+
+	if (typeof imageData === "string") {
+		fileName = imageData.split("/").pop();
+	} else if (typeof imageData === "object") {
+		fileName = imageData.url || imageData.url_2 || imageData.Image || "";
+		fileName = fileName.split("/").pop();
+	}
+
+	if (!fileName) return "Unknown";
+
+	fileName = fileName.split("__")[0];
+	fileName = fileName.replace(/_[0-9a-f-]{8,}$/i, "");
+
+	return fileName;
+};
+
+// ✅ Image error fallback
 const onImageError = (e) => {
-	e.target.src = placeholderImage;
+	if (e.target.src !== placeholderImage) {
+		e.target.src = placeholderImage;
+	}
+};
+
+// ✅ Carousel logic
+const openImagePreview = (template, index) => {
+	imageList.value = extractImages(template.images).map(getImage);
+	currentIndex.value = index;
+	showImageModal.value = true;
+};
+
+const closeImagePreview = () => {
+	showImageModal.value = false;
+	imageList.value = [];
+	currentIndex.value = 0;
+};
+
+const nextImage = () => {
+	currentIndex.value = (currentIndex.value + 1) % imageList.value.length;
+};
+
+const prevImage = () => {
+	currentIndex.value =
+		(currentIndex.value - 1 + imageList.value.length) % imageList.value.length;
 };
 
 onMounted(fetchTemplates);
 </script>
+
+<style scoped>
+/* For smoother scrollbar and transitions */
+::-webkit-scrollbar {
+	height: 6px;
+}
+::-webkit-scrollbar-thumb {
+	background-color: rgba(150, 150, 150, 0.4);
+	border-radius: 3px;
+}
+
+/* Modal smooth fade-in animation */
+[v-cloak] {
+	display: none;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+.fixed.inset-0.bg-black\/70 {
+	animation: fadeIn 0.25s ease-out;
+}
+</style>

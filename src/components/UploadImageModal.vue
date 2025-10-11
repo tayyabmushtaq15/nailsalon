@@ -82,7 +82,7 @@ function handleDragOver(e) {
 async function handleSave() {
 	if (!presignedUrl.value || !selectedFile.value) return;
 
-	loading.value = true; // ✅ start loader
+	loading.value = true; 
 	try {
 		await axios.put(presignedUrl.value, selectedFile.value, {
 			headers: { "Content-Type": selectedFile.value.type }
